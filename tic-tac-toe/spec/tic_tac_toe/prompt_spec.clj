@@ -13,7 +13,7 @@
                          (valid-next-move)))
               )
 
-          (it "reprompts when a valid numeric value input"
+          (it "reprompts until a valid input is provided"
               (should-invoke invalid-input {:times 1}
                              (should-invoke prompt-for-next-move {:times 2}
                                             (should= 1
