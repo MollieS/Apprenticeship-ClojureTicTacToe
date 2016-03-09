@@ -6,7 +6,6 @@
           (around [it]
                   (with-out-str (it)))
 
-
           (it "asks for a move"
               (should= "Please enter your next move\n"
                        (with-out-str (prompt-for-next-move))))
