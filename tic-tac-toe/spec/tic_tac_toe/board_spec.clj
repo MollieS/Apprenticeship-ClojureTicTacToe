@@ -90,4 +90,8 @@
           (it "has a winning right column of O"
               (should= O
                        (winning-symbol [nil nil O X X O nil nil O])))
+
+         (it "has no winning symbol"
+            (should= nil
+                    (winning-symbol (empty-board))))
           )
