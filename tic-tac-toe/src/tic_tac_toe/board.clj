@@ -1,4 +1,5 @@
-(ns tic-tac-toe.board)
+(ns tic-tac-toe.board
+  (:require [tic-tac-toe.marks :refer :all]))
 
 (def dimension 3)
 
@@ -52,3 +53,15 @@
     )
   )
 
+(defn find-winning-symbol [board]
+  (cond
+    (winning-row? (get-rows board)) (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-rows board))))
+    )
+  ;(if (winning-row? (get-rows board))
+  ;  (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-rows board))))
+  ;  "has no winner in row"
+  ;  )
+  )
+(defn winning-symbol [board]
+  (find-winning-symbol board)
+  )

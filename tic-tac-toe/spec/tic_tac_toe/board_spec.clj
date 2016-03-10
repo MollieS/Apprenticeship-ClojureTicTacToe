@@ -66,4 +66,17 @@
          (it "has a win in second diagonal"
             (should= true
                     (winning-line? [nil nil X O X nil X nil O])))
+
+         (it "has a winning left row of X"
+            (should= X
+                    (winning-symbol [X X X O O nil X nil O])))
+
+
+         (it "has a winning middle row of X"
+            (should= X
+                    (winning-symbol [nil nil nil X X X O nil O])))
+
+         (it "has a winning right of O"
+            (should= O
+                    (winning-symbol [nil nil X X nil X O O O])))
           )
