@@ -27,7 +27,23 @@
 
           (it "gets rows for display"
               (should= [[nil X O][nil nil X][nil O X]]
-                       (get-rows (partially-populated-board)))))
+                       (get-rows (partially-populated-board))))
+
+          (it "does not see three nils as a win"
+              (should= false
+                       (winning-line? (empty-board))))
+
+          (it "has a win in the top row"
+              (should= true
+                       (winning-line? [X X X nil O nil O nil nil])))
 
 
+          (it "has win in the middle row"
+              (should= true
+                       (winning-line? [nil nil nil X X X O O nil])))
+
+          (it "has win in the bottom row"
+              (should= true
+                       (winning-line? [nil nil nil X X nil O O O])))
+          )
 
