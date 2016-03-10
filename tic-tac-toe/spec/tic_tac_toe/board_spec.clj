@@ -45,5 +45,16 @@
           (it "has win in the bottom row"
               (should= true
                        (winning-line? [nil nil nil X X nil O O O])))
-          )
 
+
+          (it "has win in the first column"
+              (should= true
+                       (winning-line? [O X nil O nil nil O nil nil])))
+
+          (it "has win in the middle column"
+              (should= true
+                       (winning-line? [O X nil nil X O nil X nil])))
+
+          (it "has win in the right column"
+              (should= true
+                       (winning-line? [nil nil X O O X nil nil X]))))
