@@ -57,4 +57,13 @@
 
           (it "has win in the right column"
               (should= true
-                       (winning-line? [nil nil X O O X nil nil X]))))
+                       (winning-line? [nil nil X O O X nil nil X])))
+
+         (it "has a win in first diagonal"
+            (should= true
+                    (winning-line? [O nil nil X O nil X nil O])))
+
+         (it "has a win in second diagonal"
+            (should= true
+                    (winning-line? [nil nil X O X nil X nil O])))
+          )

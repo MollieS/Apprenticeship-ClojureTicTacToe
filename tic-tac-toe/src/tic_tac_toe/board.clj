@@ -19,17 +19,33 @@
    ])
 
 (defn- winning-row? [rows]
-  (some true? (map (fn[[one two three]] (and (= one two three) (not (= one nil)))) rows )))
+  (some true? (map
+                (fn[[one two three]] (and (= one two three) (not (= one nil))))
+                rows )))
 
-(defn get-columns[board]
+(defn- get-columns[board]
   (get-rows (vec (flatten (conj (map (fn[x] (first x)) (get-rows board))
                                 (map (fn[x] (second x) ) (get-rows board))
                                 (map (fn[x] (nth x 2)) (get-rows board)))))))
+
+(defn- get-diagonals[board]
+  [
+   (vector
+     (get-mark-at-index board 0)
+     (get-mark-at-index board 4)
+     (get-mark-at-index board 8))
+   (vector
+     (get-mark-at-index board 2)
+     (get-mark-at-index board 4)
+     (get-mark-at-index board 6))
+   ]
+  )
 
 (defn winning-line? [board]
   (if (= true (or
                 (winning-row? (get-rows board))
                 (winning-row? (get-columns board))
+                (winning-row? (get-diagonals board))
                 ))
     true
     false
