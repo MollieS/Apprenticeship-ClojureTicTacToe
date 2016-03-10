@@ -53,17 +53,19 @@
     )
   )
 
-(defn find-winning-symbol [board]
+(defn- find-winning-symbol [rows]
+  (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) rows))))
+
+(defn winning-symbol [board]
   (cond
-    (winning-row? (get-rows board))
-    (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-rows board))))
-    (winning-row? (get-columns board))
-    (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-columns board))))
-  (winning-row? (get-diagonals board))
-    (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-diagonals board))))
+    (winning-row? (get-rows board)) (find-winning-symbol (get-rows board))
+    (winning-row? (get-columns board)) (find-winning-symbol (get-columns board))
+    (winning-row? (get-diagonals board)) (find-winning-symbol (get-diagonals board))
     )
   )
 
-(defn winning-symbol [board]
-  (find-winning-symbol board)
-  )
+(defn free-spaces? [board]
+  (> (count (filter (fn[x] (= nil x)) board)) 0))
+
+(defn indicies-of-free-spaces [board]
+  (map (fn[[index value]] (+ index 1)) (filter #(= nil (second %))(map-indexed vector board))))

@@ -102,4 +102,15 @@
          (it "has a winning diagonal row of O"
             (should= O
                     (winning-symbol [nil nil O X O nil O nil X])))
-          )
+
+         (it "has free spaces"
+            (should= true
+                    (free-spaces? (empty-board))))
+
+         (it "has no free spaces"
+            (should= false
+                    (free-spaces? [X X O X O O X O X])))
+
+(it "has indexes of free spaces"
+    (should= [1 2 3]
+             (indicies-of-free-spaces [nil nil nil X O X O X O]))))
