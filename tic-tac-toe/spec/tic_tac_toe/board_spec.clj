@@ -94,4 +94,12 @@
          (it "has no winning symbol"
             (should= nil
                     (winning-symbol (empty-board))))
+
+          (it "has a winning diagonal row of X"
+              (should= X
+                       (winning-symbol [X nil nil O X nil O nil X])))
+
+         (it "has a winning diagonal row of O"
+            (should= O
+                    (winning-symbol [nil nil O X O nil O nil X])))
           )
