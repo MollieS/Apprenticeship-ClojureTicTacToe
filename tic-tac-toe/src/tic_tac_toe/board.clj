@@ -56,6 +56,8 @@
 (defn find-winning-symbol [board]
   (cond
     (winning-row? (get-rows board)) (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-rows board))))
+    (winning-row? (get-columns board))
+    (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-columns board))))
     )
   ;(if (winning-row? (get-rows board))
   ;  (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) (get-rows board))))
