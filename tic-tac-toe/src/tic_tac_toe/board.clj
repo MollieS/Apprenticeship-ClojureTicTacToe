@@ -3,6 +3,23 @@
 
 (def dimension 3)
 
+(defn- one-based [value]
+  (+ value 1))
+
+(defn- three-matching-player-symbols? [row]
+  (let [[one two three] row]
+    (and (= one two three) (not(= one nil)))))
+
+(defn- winning-row? [rows]
+  (some true? (map
+                (fn[row] (three-matching-player-symbols? row))
+                rows )))
+
+(defn- find-winning-symbol [rows]
+  (first
+    (filter (fn[matching-symbols] (not (= matching-symbols nil)))
+            (map (fn[row] (if (three-matching-player-symbols? row) (first row) nil)) rows))))
+
 (defn create [board-config]
   board-config)
 
@@ -19,17 +36,11 @@
    (subvec board (* 2 dimension) (* 3 dimension))
    ])
 
-(defn- winning-row? [rows]
-  (some true? (map
-                (fn[[one two three]] (and (= one two three) (not (= one nil))))
-                rows )))
-
-(defn- get-columns[board]
-  (get-rows (vec (flatten (conj (map (fn[x] (first x)) (get-rows board))
-                                (map (fn[x] (second x) ) (get-rows board))
-                                (map (fn[x] (nth x 2)) (get-rows board)))))))
-
-(defn- get-diagonals[board]
+(defn get-columns[board]
+  (get-rows (vec (flatten (conj (map (fn[row] (first row)) (get-rows board))
+                                (map (fn[row] (second row) ) (get-rows board))
+                                (map (fn[row] (nth row 2)) (get-rows board)))))))
+(defn get-diagonals[board]
   [
    (vector
      (get-mark-at-index board 0)
@@ -53,9 +64,6 @@
     )
   )
 
-(defn- find-winning-symbol [rows]
-  (first (filter (fn[x] (not (= x nil))) (map (fn[[one two three]] (if (and (= one two three) (not(= one nil))) one nil)) rows))))
-
 (defn winning-symbol [board]
   (cond
     (winning-row? (get-rows board)) (find-winning-symbol (get-rows board))
@@ -65,7 +73,7 @@
   )
 
 (defn free-spaces? [board]
-  (> (count (filter (fn[x] (= nil x)) board)) 0))
+  (> (count (filter (fn[cell] (= nil cell)) board)) 0))
 
 (defn indicies-of-free-spaces [board]
-  (map (fn[[index value]] (+ index 1)) (filter #(= nil (second %))(map-indexed vector board))))
+  (map (fn[[index value]] (one-based index)) (filter #(= nil (second %))(map-indexed vector board))))
