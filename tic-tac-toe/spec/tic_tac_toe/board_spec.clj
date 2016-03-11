@@ -112,7 +112,7 @@
                        (free-spaces? [X X O X O O X O X])))
 
           (it "has indexes of free spaces"
-              (should= [1 2 3]
+              (should= [0 1 2]
                        (indicies-of-free-spaces [nil nil nil X O X O X O])))
 
           (it "has no free spaces"

@@ -9,6 +9,3 @@
     (catch Exception e
       (invalid-input)
       (valid-next-move))))
-
-(defn -main[]
-  (valid-next-move))

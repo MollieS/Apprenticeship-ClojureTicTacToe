@@ -7,6 +7,9 @@
   (apply str (interleave coll)))
 
 (describe "Prompt"
+          (around [it]
+                  (with-out-str (it)))
+
           (it "asks for input and reads it in"
               (should= 5
                        (with-in-str "5\n"
