@@ -3,21 +3,16 @@
 
 (def dimension 3)
 
-(defn- one-based [value]
-  (+ value 1))
-
 (defn- three-matching-player-symbols? [row]
   (let [[one two three] row]
     (and (= one two three) (not(= one nil)))))
 
 (defn- winning-row? [rows]
-  (some true? (map
-                (fn[row] (three-matching-player-symbols? row))
-                rows )))
+  (some true? (map three-matching-player-symbols? rows)))
 
 (defn- find-winning-symbol [rows]
   (first
-    (filter (fn[matching-symbols] (not (= matching-symbols nil)))
+    (remove nil?
             (map (fn[row] (if (three-matching-player-symbols? row) (first row) nil)) rows))))
 
 (defn create [board-config]
@@ -54,14 +49,11 @@
   )
 
 (defn winning-line? [board]
-  (if (= true (or
-                (winning-row? (get-rows board))
-                (winning-row? (get-columns board))
-                (winning-row? (get-diagonals board))
-                ))
-    true
-    false
-    )
+  (boolean (or
+             (winning-row? (get-rows board))
+             (winning-row? (get-columns board))
+             (winning-row? (get-diagonals board))
+             ))
   )
 
 (defn winning-symbol [board]
@@ -73,7 +65,7 @@
   )
 
 (defn free-spaces? [board]
-  (> (count (filter (fn[cell] (= nil cell)) board)) 0))
+  (boolean (some nil? board)))
 
 (defn indicies-of-free-spaces [board]
-  (map (fn[[index value]] (one-based index)) (filter #(= nil (second %))(map-indexed vector board))))
+  (map (fn[[index value]] index) (filter #(= nil (second %))(map-indexed vector board))))
