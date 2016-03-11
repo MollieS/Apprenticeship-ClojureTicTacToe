@@ -11,10 +11,13 @@
               (should= "Please enter your next move\n"
                        (with-out-str (prompt-for-next-move))))
 
+          (it "displays invalid message when input is not numeric"
+              (should= "Not a numeric input!\n"
+                       (with-out-str (non-numeric-input))))
 
-          (it "displays invalid input message"
-              (should= "Invalid input!\n"
-                       (with-out-str (invalid-input))))
+          (it "displays invalid message when input is not a valid position on the board"
+              (should= "Not a valid position!\n"
+                       (with-out-str (not-free-space))))
 
           (it "displays draw message"
               (should= "The game was a draw\n"
