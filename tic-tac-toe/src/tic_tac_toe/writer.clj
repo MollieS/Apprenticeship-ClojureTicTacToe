@@ -15,7 +15,7 @@
 
 (defn- border [board]
   (let [[cell-one cell-two cell-three] board]
-           (map (fn[[cell-one cell-two cell-three]] (str "\n [ " cell-one " ] [ " cell-two " ] [ " cell-three " ]")) board)))
+    (map (fn[[cell-one cell-two cell-three]] (str "\n [ " cell-one " ] [ " cell-two " ] [ " cell-three " ]")) board)))
 
 (defn prompt-for-next-move []
   (println "Please enter your next move"))
@@ -31,3 +31,6 @@
 
 (defn display [board]
   (apply println (border (get-rows (vec (board-with-one-based-indicies board))))))
+
+(defn -main[]
+    (display [nil nil nil nil nil 'X nil 'O nil]))

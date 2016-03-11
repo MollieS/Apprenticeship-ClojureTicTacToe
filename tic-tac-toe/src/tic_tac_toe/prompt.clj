@@ -9,4 +9,3 @@
     (catch Exception e
       (invalid-input)
       (valid-next-move))))
-
