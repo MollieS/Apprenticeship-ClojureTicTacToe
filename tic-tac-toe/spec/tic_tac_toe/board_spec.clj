@@ -15,11 +15,9 @@
               (should= (partially-populated-board)
                        (create [nil X O nil nil X nil O X])))
 
-
           (it "updates with players mark at given index"
               (should= [nil nil nil nil nil nil nil nil X]
                        (place-mark (empty-board) X 8)))
-
 
           (it "gets the players mark at a given index"
               (should= X
