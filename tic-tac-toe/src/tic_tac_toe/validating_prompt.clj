@@ -1,4 +1,4 @@
-(ns tic-tac-toe.prompt
+(ns tic-tac-toe.validating-prompt
   (:require [tic-tac-toe.writer :refer :all]
             [tic-tac-toe.reader :refer :all]
             [tic-tac-toe.board :refer :all]

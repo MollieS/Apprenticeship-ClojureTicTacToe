@@ -3,7 +3,7 @@
             [tic-tac-toe.ttt :refer :all]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.board :refer :all]
-            [tic-tac-toe.prompt :refer :all]
+            [tic-tac-toe.validating-prompt :refer :all]
             [tic-tac-toe.writer :refer :all]
             [tic-tac-toe.reader :refer :all]))
 
@@ -33,7 +33,7 @@
                 )
               )
 
-          (it "Checks for a win after each move"
+          (it "checks for a win after each move"
               (with-redefs [winning-line?(stub :winning-line? {:return false})]
                 ( with-in-str "3\n4\n9\n"
                   (play [X O nil nil X O O X nil]))
@@ -41,7 +41,7 @@
                 )
               )
 
-          (it "Checks for a draw after each move until a win takes place"
+          (it "checks for a draw after each move until a win takes place"
               (with-redefs [free-spaces?(stub :free-spaces? {:return true})]
                 ( with-in-str "3\n4\n9\n"
                   (play [X O nil nil X O O X nil]))
@@ -49,12 +49,12 @@
                 )
               )
 
-          (it "Announces win"
+          (it "announces win"
               (with-redefs [valid-next-move (stub :next-move {:return 3}) ]
                 (should-contain "The game was won by X"
                                 (with-out-str (play [X O nil nil O nil X X O])))))
 
-          (it "Announces draw"
+          (it "announces draw"
               (with-redefs [valid-next-move (stub :next-move {:return 2})]
                 (should-contain "The game was a draw"
                                 (with-out-str (play [X O nil O X X O X O])))))

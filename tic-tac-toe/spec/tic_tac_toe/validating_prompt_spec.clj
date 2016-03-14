@@ -1,6 +1,6 @@
-(ns tic-tac-toe.prompt-spec
+(ns tic-tac-toe.validating-prompt-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.prompt :refer :all]
+            [tic-tac-toe.validating-prompt :refer :all]
             [tic-tac-toe.writer :refer :all]
             [tic-tac-toe.marks :refer :all]))
 
