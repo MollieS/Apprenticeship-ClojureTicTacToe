@@ -6,5 +6,5 @@
   :dependencies [[org.clojure/clojure "1.7.0-RC2"]]
   :profiles {:dev {:dependencies [[speclj "3.3.1"]]}}
   :plugins [[speclj "3.3.1"]]
-  :main ^:skip-aot tic-tac-toe.prompt
+  :main ^:skip-aot tic-tac-toe.ttt
   :test-paths ["spec"])

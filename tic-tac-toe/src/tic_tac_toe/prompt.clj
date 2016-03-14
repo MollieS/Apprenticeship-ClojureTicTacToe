@@ -44,5 +44,3 @@
     )
   )
 
-(defn -main[]
-  (valid-next-move [nil nil nil nil nil 'X nil 'O nil]))
