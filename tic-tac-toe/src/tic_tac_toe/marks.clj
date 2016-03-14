@@ -1,4 +1,4 @@
-( ns tic-tac-toe.marks)
+(ns tic-tac-toe.marks)
 
 (def X 'X)
 (def O 'O)

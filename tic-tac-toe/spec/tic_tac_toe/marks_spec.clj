@@ -8,10 +8,11 @@
               (should= X
                        (next-mark [nil nil nil nil nil nil nil nil nil])))
 
-          (it "calculates next symbol"
+          (it "calculates next symbol is O"
               (should= O
                        (next-mark [X O nil X nil nil nil nil nil]))
               )
-          )
 
-
+         (it "calculates next symbol is X"
+            (should= X
+                     (next-mark [X O nil nil nil nil nil nil nil]))))

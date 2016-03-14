@@ -34,4 +34,3 @@
 
 (defn display [board]
   (apply println (border (get-rows (vec (board-with-one-based-indicies board))))))
-
