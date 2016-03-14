@@ -6,14 +6,20 @@
             [tic-tac-toe.marks :refer :all]))
 
 (defn play [board]
-    (display board)
-    (display (place-mark board (next-mark board) (valid-next-move board) ))
-  ;;check for win
+  (let [updated-board (place-mark board (next-mark board) (valid-next-move board) )]
+    (display updated-board)
+    (cond
+      (winning-line? updated-board) (win (winning-symbol updated-board))
+      (not (free-spaces? updated-board)) (draw)
+      :else
+       (play updated-board)
+      )
+    )
   )
-
 
 (defn start[]
   (let [board (create (vec (repeat 9 nil)))]
+    (display board)
     (play board)))
 
 (defn -main[]
