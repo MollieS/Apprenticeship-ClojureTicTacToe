@@ -20,8 +20,11 @@
 (defn prompt-for-next-move []
   (println "Please enter your next move"))
 
-(defn invalid-input[]
-  (println "Invalid input!"))
+(defn non-numeric-input[]
+  (println "Not a numeric input!"))
+
+(defn not-free-space[]
+  (println "Not a valid position!"))
 
 (defn draw[]
   (println "The game was a draw"))
@@ -32,5 +35,3 @@
 (defn display [board]
   (apply println (border (get-rows (vec (board-with-one-based-indicies board))))))
 
-(defn -main[]
-    (display [nil nil nil nil nil 'X nil 'O nil]))
