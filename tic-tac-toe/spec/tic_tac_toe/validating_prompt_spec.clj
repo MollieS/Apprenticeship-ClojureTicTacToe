@@ -34,6 +34,14 @@
                                                      (with-in-str "44\n0\n5"
                                                        (valid-next-move (empty-board)))))))
 
+          (it "displays board when an invalid input is provided"
+              (should-invoke writer/invalid-space-message {:times 2}
+                             (should-invoke writer/display {:times 2}
+                                            (should= (zero-based 5)
+                                                     (with-in-str "44\n0\n5"
+                                                       (valid-next-move (empty-board)))))))
+
+
           (it "gives different error messages depending on the invalid input"
               (should-invoke writer/invalid-space-message {:times 1}
                              (should-invoke writer/not-numeric-message {:times 1}

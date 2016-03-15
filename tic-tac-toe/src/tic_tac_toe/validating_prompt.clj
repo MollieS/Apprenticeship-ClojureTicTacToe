@@ -7,18 +7,14 @@
 (defn- zero-based [index]
   (- index 1))
 
-(defn- invalid-space[]
-  (writer/invalid-space-message)
-  false)
-
 (defn- vacant-space[index spaces-on-board]
   (boolean (some #(= index %) spaces-on-board))
   )
 
-(defn- within-range? [provided-index spaces-on-board]
-  (if (vacant-space provided-index spaces-on-board)
+(defn- within-range? [provided-index board]
+  (if (vacant-space provided-index (board/indicies-of-free-spaces board))
     true
-    (invalid-space)
+    false
     )
   )
 
@@ -28,22 +24,41 @@
 (defn- numeric? [input]
   (try
     (to-number input)
-      true
+    true
     (catch Exception e
-      (writer/not-numeric-message)
       false
       )
     ))
 
-(defn valid-next-move[board]
-  (writer/prompt-for-next-move)
+(defn- show-invalid-message [error-msg board]
+  (writer/display board)
+  (error-msg)
+  )
 
-  (let [input (reader/read-input)]
+(defn- not-numeric [input]
+  (not (numeric? input)))
 
-    (if (and (numeric? input)
-             (within-range? (zero-based (to-number input)) (board/indicies-of-free-spaces board)))
-      (zero-based (to-number input))
-      (valid-next-move board)
+(defn- not-valid-space [input board]
+  (not (within-range? (zero-based (to-number input)) board)))
+
+  (defn valid-next-move[board]
+    (writer/prompt-for-next-move)
+
+    (let [input (reader/read-input)]
+
+      (if (not-numeric input)
+        (do
+          (show-invalid-message writer/not-numeric-message board)
+          (valid-next-move board)
+          )
+
+        (if (not-valid-space input board)
+          (do
+            (show-invalid-message writer/invalid-space-message board)
+            (valid-next-move board)
+            )
+          (zero-based (to-number input))
+          )
+        )
       )
     )
-  )
