@@ -1,20 +1,24 @@
 (ns tic-tac-toe.validating-prompt
-  (:require [tic-tac-toe.writer :refer :all]
-            [tic-tac-toe.reader :refer :all]
-            [tic-tac-toe.board :refer :all]
+  (:require [tic-tac-toe.writer :as writer]
+            [tic-tac-toe.reader :as reader]
+            [tic-tac-toe.board :as board]
             ))
 
 (defn- zero-based [index]
   (- index 1))
 
-(defn- false-and-publish-error-message[]
-  (not-free-space)
+(defn- invalid-space[]
+  (writer/invalid-space-message)
   false)
 
+(defn- vacant-space[index spaces-on-board]
+  (boolean (some #(= index %) spaces-on-board))
+  )
+
 (defn- within-range? [provided-index spaces-on-board]
-  (if (boolean (some #(= provided-index %) spaces-on-board))
+  (if (vacant-space provided-index spaces-on-board)
     true
-    (false-and-publish-error-message)
+    (invalid-space)
     )
   )
 
@@ -26,18 +30,18 @@
     (to-number input)
       true
     (catch Exception e
-      (non-numeric-input)
+      (writer/not-numeric-message)
       false
       )
     ))
 
 (defn valid-next-move[board]
-  (prompt-for-next-move)
+  (writer/prompt-for-next-move)
 
-  (let [input (read-input)]
+  (let [input (reader/read-input)]
 
     (if (and (numeric? input)
-             (within-range? (zero-based (to-number input)) (indicies-of-free-spaces board)))
+             (within-range? (zero-based (to-number input)) (board/indicies-of-free-spaces board)))
       (zero-based (to-number input))
       (valid-next-move board)
       )

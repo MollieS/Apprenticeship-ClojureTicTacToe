@@ -20,7 +20,7 @@
                          (valid-next-move (empty-board)))))
 
           (it "reprompts until a numeric input is provided"
-              (should-invoke non-numeric-input {:times 1}
+              (should-invoke not-numeric-message {:times 1}
                              (should-invoke prompt-for-next-move {:times 2}
                                             (should= (zero-based 1)
                                                      (with-in-str "A\n1\n"
@@ -28,14 +28,14 @@
 
 
           (it "reprompts until a appropriate number is provided"
-              (should-invoke not-free-space {:times 2}
+              (should-invoke invalid-space-message {:times 2}
                              (should-invoke prompt-for-next-move {:times 3}
                                             (should= (zero-based 5)
                                                      (with-in-str "44\n0\n5"
                                                        (valid-next-move (empty-board)))))))
 
           (it "gives different error messages depending on the invalid input"
-              (should-invoke not-free-space {:times 1}
-                             (should-invoke non-numeric-input {:times 1}
+              (should-invoke invalid-space-message {:times 1}
+                             (should-invoke not-numeric-message {:times 1}
                                             (with-in-str "1\nG\n9\n"
                                               (valid-next-move [X nil nil nil nil nil nil nil nil]))))))

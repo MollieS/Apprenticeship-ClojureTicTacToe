@@ -11,7 +11,7 @@
   (board/winning-line? board))
 
 (defn- announce-win [board]
-  (writer/win (board/winning-symbol board)))
+  (writer/win-message (board/winning-symbol board)))
 
 (defn- no-free-spaces? [board]
 (not (board/free-spaces? board)))
@@ -21,7 +21,7 @@
     (writer/display updated-board)
     (cond
       (has-win? updated-board) (announce-win updated-board)
-      (no-free-spaces? updated-board) (writer/draw)
+      (no-free-spaces? updated-board) (writer/draw-message)
       :else
        (play-move updated-board)
       )
