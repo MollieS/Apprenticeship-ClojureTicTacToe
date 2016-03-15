@@ -1,7 +1,7 @@
 (ns tic-tac-toe.writer-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.marks :refer :all]
-            [tic-tac-toe.writer :refer :all]))
+            [tic-tac-toe.writer :refer :all]
+            [tic-tac-toe.marks :refer :all]))
 
 (describe "Command Line Writer"
           (around [it]
