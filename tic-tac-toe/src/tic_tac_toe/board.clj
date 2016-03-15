@@ -1,5 +1,4 @@
-(ns tic-tac-toe.board
-  (:require [tic-tac-toe.marks :refer :all]))
+(ns tic-tac-toe.board)
 
 (def dimension 3)
 

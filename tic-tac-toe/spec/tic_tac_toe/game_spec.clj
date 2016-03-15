@@ -1,6 +1,6 @@
-(ns tic-tac-toe.ttt-spec
+(ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.ttt :refer :all]
+            [tic-tac-toe.game :refer :all]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.board :refer :all]
             [tic-tac-toe.validating-prompt :refer :all]

@@ -1,6 +1,5 @@
-(ns tic-tac-toe.ttt
-  (:require [tic-tac-toe.ttt :refer :all]
-            [tic-tac-toe.validating-prompt :as prompt]
+(ns tic-tac-toe.game
+  (:require [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.marks :as marks]))
