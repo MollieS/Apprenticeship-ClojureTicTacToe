@@ -15,8 +15,8 @@
     (remove nil?
             (map (fn[row] (if (three-matching-player-symbols? row) (first row) nil)) rows))))
 
-(defn create [board-config]
-  board-config)
+(defn create-empty-board []
+  (vec (repeat 9 nil)))
 
 (defn place-mark[board mark index]
   (assoc board index mark))

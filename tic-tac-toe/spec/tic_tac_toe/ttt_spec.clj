@@ -16,7 +16,7 @@
                   (with-out-str (it)))
 
           (it "game starts by displaying an empty board"
-              (with-redefs [create (stub :create {:return (empty-board)})
+              (with-redefs [create-empty-board (stub :create {:return (empty-board)})
                             play-move (stub :play-move {:return "whole game is stubbed"})
                             display (stub :display {:return "Board is displayed"}) ]
                 (start)

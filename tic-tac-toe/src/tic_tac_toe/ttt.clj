@@ -1,12 +1,12 @@
 (ns tic-tac-toe.ttt
   (:require [tic-tac-toe.ttt :refer :all]
-            [tic-tac-toe.validating-prompt :refer :all]
+            [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.marks :refer :all]))
+            [tic-tac-toe.marks :as marks]))
 
 (defn- empty-board []
-(board/create (vec (repeat 9 nil))))
+(board/create-empty-board))
 
 (defn- has-win? [board]
   (board/winning-line? board))
@@ -18,7 +18,7 @@
 (not (board/free-spaces? board)))
 
 (defn play-move [board]
-  (let [updated-board (board/place-mark board (next-mark board) (valid-next-move board) )]
+  (let [updated-board (board/place-mark board (marks/next-mark board) (prompt/valid-next-move board) )]
     (writer/display updated-board)
     (cond
       (has-win? updated-board) (announce-win updated-board)

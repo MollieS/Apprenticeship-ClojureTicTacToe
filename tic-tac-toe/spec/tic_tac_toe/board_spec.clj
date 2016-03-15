@@ -11,9 +11,9 @@
 
 (describe "Board"
 
-          (it "created with given configuration"
-              (should= (partially-populated-board)
-                       (create [nil X O nil nil X nil O X])))
+          (it "initialised as empty"
+              (should= (empty-board)
+                       (create-empty-board)))
 
           (it "updates with players mark at given index"
               (should= [nil nil nil nil nil nil nil nil X]
