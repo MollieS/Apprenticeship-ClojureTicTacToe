@@ -17,7 +17,7 @@
 (not (board/free-spaces? board)))
 
 (defn play-move [board]
-  (let [updated-board (board/place-mark board (marks/next-mark board) (prompt/valid-next-move board) )]
+  (let [updated-board (board/place-mark board (marks/next-mark board) (prompt/get-valid-next-move board) )]
     (writer/display updated-board)
     (cond
       (has-win? updated-board) (announce-win updated-board)
@@ -29,7 +29,7 @@
   )
 
 (defn start[]
-  (let [player-choice (prompt/valid-player-option)
+  (let [player-choice (prompt/get-valid-player-option)
         board (empty-board)]
     (writer/display board)
     (play-move board)))

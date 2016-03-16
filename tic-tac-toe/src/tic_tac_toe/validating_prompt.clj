@@ -5,8 +5,11 @@
             [tic-tac-toe.player-options :as player-options]
             ))
 
-(defn- zero-based [index]
-  (- index 1))
+(defn- to-number [input]
+  (Integer/parseInt input))
+
+(defn- zero-based-number [index]
+  (- (to-number index) 1))
 
 (defn- show-board-with-invalid-message [error-msg board]
   (writer/display board)
@@ -21,11 +24,7 @@
     (do
       (error-msg)
       false
-      ))
-  )
-
-(defn- to-number [input]
-  (Integer/parseInt input))
+      )))
 
 (defn- validate-input-is-numeric [input error-msg]
   (try
@@ -37,36 +36,47 @@
       )
     ))
 
-(defn valid-next-move[board]
-  (writer/prompt-for-next-move)
-
-  (let [input (reader/read-input)]
-
-    (if (and
-          (validate-input-is-numeric input #(show-board-with-invalid-message writer/not-numeric-message board))
-          (validate-input-is-within-range
-            (zero-based (to-number input))
-            #(board/indicies-of-free-spaces board)
-            #(show-board-with-invalid-message writer/invalid-space-message board)
-            ))
-      (zero-based (to-number input))
-      (valid-next-move board)
+(defn- validation-criteria-for-player-option [input]
+  (and
+    (validate-input-is-numeric input writer/not-numeric-message)
+    (validate-input-is-within-range
+      (to-number input)
+      player-options/valid-player-options
+      writer/invalid-player-option-message
       )
     )
   )
 
-(defn valid-player-option[]
-  (writer/prompt-for-player-option)
+(defn- validation-criteria-for-next-move [board input]
+  (and
+    (validate-input-is-numeric input #(show-board-with-invalid-message writer/not-numeric-message board))
+    (validate-input-is-within-range
+      (zero-based-number input)
+      #(board/indicies-of-free-spaces board)
+      #(show-board-with-invalid-message writer/invalid-space-message board)
+      )))
+
+(defn- validate-input[prompt-user valid-conditions format-input]
+  (prompt-user)
 
   (let [input (reader/read-input)]
-    (if
-      (and
-        (validate-input-is-numeric input writer/not-numeric-message)
-        (validate-input-is-within-range
-          (to-number input)
-          player-options/valid-player-options
-          writer/invalid-player-option-message
-          )
-        )
-      (to-number input)
-      (valid-player-option))))
+    (if (valid-conditions input)
+      (format-input input)
+      (validate-input prompt-user valid-conditions format-input)
+      )
+    )
+  )
+
+(defn get-valid-player-option[]
+  (validate-input
+    writer/prompt-for-player-option
+    validation-criteria-for-player-option
+    to-number
+    ))
+
+(defn get-valid-next-move[board]
+  (validate-input
+    writer/prompt-for-next-move
+    #(validation-criteria-for-next-move board %)
+    zero-based-number
+    ))
