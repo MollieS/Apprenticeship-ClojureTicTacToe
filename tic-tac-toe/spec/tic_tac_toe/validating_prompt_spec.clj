@@ -9,8 +9,8 @@
 
 (defn- zero-based [input]
   (- input 1))
-
 (describe "Prompt"
+
           (around [it]
                   (with-out-str (it)))
 
@@ -26,7 +26,6 @@
                                                      (with-in-str "A\n1\n"
                                                        (valid-next-move (empty-board)))))))
 
-
           (it "reprompts for next move until a appropriate value is provided"
               (should-invoke writer/invalid-space-message {:times 2}
                              (should-invoke writer/prompt-for-next-move {:times 3}
@@ -41,19 +40,17 @@
                                                      (with-in-str "44\n0\n5"
                                                        (valid-next-move (empty-board)))))))
 
-
           (it "gives different error messages depending on the invalid input for next move"
               (should-invoke writer/invalid-space-message {:times 1}
                              (should-invoke writer/not-numeric-message {:times 1}
                                             (with-in-str "1\nG\n9\n"
                                               (valid-next-move [X nil nil nil nil nil nil nil nil])))))
 
-
           (it "prompts and reads in player option"
               (should-invoke writer/prompt-for-player-option {:times 1}
-                             (should= 1 (with-in-str "1\n"
-                                          (valid-player-option))))
-              )
+                             (should= 1
+                                      (with-in-str "1\n"
+                                          (valid-player-option)))))
 
           (it "reprompts until a numeric player option is provided"
               (should-invoke writer/not-numeric-message {:times 1}
@@ -61,4 +58,10 @@
                                             (should= 1
                                                      (with-in-str "A\n1\n"
                                                        (valid-player-option))))))
-          )
+
+          (it "reprompts until a number within the correct range is provided for player option"
+              (should-invoke writer/invalid-player-option-message {:times 1}
+                             (should-invoke writer/prompt-for-player-option {:times 2}
+                                            (should= 1
+                                                     (with-in-str "6\n1\n"
+                                                       (valid-player-option)))))))

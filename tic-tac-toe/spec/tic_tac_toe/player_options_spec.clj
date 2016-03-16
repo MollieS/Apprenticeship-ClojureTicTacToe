@@ -6,8 +6,12 @@
 
           (it "has one category"
               (should= 1
-                       (count(player-options))))
+                       (count player-options)))
 
           (it "has display format"
               (should= "(1) Human vs Human\n"
-                       (display))))
+                       (display)))
+
+         (it "valid choices"
+          (should= '(1)
+                  (valid-player-options))))

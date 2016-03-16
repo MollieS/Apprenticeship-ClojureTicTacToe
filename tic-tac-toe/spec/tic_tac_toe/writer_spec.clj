@@ -37,4 +37,8 @@
 
          (it "displays player options"
             (should= "Choose player option:\n(1) Human vs Human\n"
-                    (with-out-str ( prompt-for-player-option)))) )
+                    (with-out-str ( prompt-for-player-option))))
+
+         (it "displays invalid message when input is not a valid player option"
+            (should= "Not a valid player option!\n"
+                    (with-out-str (invalid-player-option-message)))))
