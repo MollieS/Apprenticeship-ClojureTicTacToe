@@ -8,33 +8,24 @@
 (defn- zero-based [index]
   (- index 1))
 
-(defn- within-range[value valid-range]
-   (boolean (some #(= value %) valid-range)))
-
 (defn- show-board-with-invalid-message [error-msg board]
   (writer/display board)
   (error-msg))
 
-(defn- validate-input-is-within-range [provided-index board]
-  (if (within-range provided-index (board/indicies-of-free-spaces board))
+(defn- includes? [value valid-range]
+  (boolean (some #(= value %) valid-range)))
+
+(defn- validate-input-is-within-range [input valid-range error-msg]
+  (if (includes? input (valid-range))
     true
     (do
-      (show-board-with-invalid-message writer/invalid-space-message board)
+      (error-msg)
       false
       ))
   )
 
 (defn- to-number [input]
   (Integer/parseInt input))
-
-(defn- validate-player-option-is-within-range [input]
-     (if (within-range (to-number input) (player-options/valid-player-options)) ; rename!
-    true
-    (do
-      (writer/invalid-player-option-message)
-      false
-      ))
-  )
 
 (defn- validate-input-is-numeric [input error-msg]
   (try
@@ -53,7 +44,11 @@
 
     (if (and
           (validate-input-is-numeric input #(show-board-with-invalid-message writer/not-numeric-message board))
-          (validate-input-is-within-range (zero-based (to-number input)) board))
+          (validate-input-is-within-range
+            (zero-based (to-number input))
+            #(board/indicies-of-free-spaces board)
+            #(show-board-with-invalid-message writer/invalid-space-message board)
+            ))
       (zero-based (to-number input))
       (valid-next-move board)
       )
@@ -67,6 +62,11 @@
     (if
       (and
         (validate-input-is-numeric input writer/not-numeric-message)
-        (validate-player-option-is-within-range input ))
+        (validate-input-is-within-range
+          (to-number input)
+          player-options/valid-player-options
+          writer/invalid-player-option-message
+          )
+        )
       (to-number input)
       (valid-player-option))))
