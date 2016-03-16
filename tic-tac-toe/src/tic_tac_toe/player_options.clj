@@ -1,7 +1,7 @@
 (ns tic-tac-toe.player-options)
 
 (defn player-options[]
-  ["Human vs Human"])
+  { 1 "Human vs Human"})
 
 (defn display[]
-  (apply str (map (fn[[k v]] (str "(" (+ 1 k) ") " v "\n")) (map-indexed vector (player-options)))))
+  (apply str (map (fn[[k v]] (str "(" k ") " v "\n")) (player-options))))

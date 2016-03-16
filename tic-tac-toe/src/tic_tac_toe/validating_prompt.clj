@@ -11,7 +11,7 @@
   (boolean (some #(= index %) spaces-on-board))
   )
 
-(defn- show-invalid-message [error-msg board]
+(defn- show-board-with-invalid-message [error-msg board]
   (writer/display board)
   (error-msg))
 
@@ -19,7 +19,7 @@
   (if (vacant-space provided-index (board/indicies-of-free-spaces board))
     true
     (do
-      (show-invalid-message writer/invalid-space-message board)
+      (show-board-with-invalid-message writer/invalid-space-message board)
       false
       ))
   )
@@ -27,12 +27,13 @@
 (defn- to-number [input]
   (Integer/parseInt input))
 
-(defn- validate-input-is-numeric [input board]
+(defn- validate-input-is-numeric [input error-msg]
   (try
     (to-number input)
     true
     (catch Exception e
-      (show-invalid-message writer/not-numeric-message board)
+      (error-msg)
+      ;(show-board-with-invalid-message writer/not-numeric-message board)
       false
       )
     ))
@@ -42,7 +43,7 @@
 
   (let [input (reader/read-input)]
 
-    (if (and (validate-input-is-numeric input board)
+    (if (and (validate-input-is-numeric input #(show-board-with-invalid-message writer/not-numeric-message board))
              (validate-input-is-within-range (zero-based (to-number input)) board))
       (zero-based (to-number input))
       (valid-next-move board)
@@ -52,5 +53,10 @@
 
 (defn valid-player-option[]
   (writer/prompt-for-player-option)
-  (to-number (reader/read-input))
-  )
+
+  (let [input (reader/read-input)]
+
+    (if (validate-input-is-numeric input writer/not-numeric-message)
+  ; is it a key in the player options map
+    (to-number input)
+    (valid-player-option))))

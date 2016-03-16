@@ -51,11 +51,14 @@
 
           (it "prompts and reads in player option"
               (should-invoke writer/prompt-for-player-option {:times 1}
-
                              (should= 1 (with-in-str "1\n"
                                           (valid-player-option))))
               )
 
-
-
+          (it "reprompts until a numeric player option is provided"
+              (should-invoke writer/not-numeric-message {:times 1}
+                             (should-invoke writer/prompt-for-player-option {:times 2}
+                                            (should= 1
+                                                     (with-in-str "A\n1\n"
+                                                       (valid-player-option))))))
           )
