@@ -14,8 +14,16 @@
           (around [it]
                   (with-out-str (it)))
 
-          (it "game starts by displaying an empty board"
-              (with-redefs [board/create-empty-board (stub :create {:return (empty-board)})
+          (it "game determines player options"
+              (with-redefs [prompt/valid-player-option (stub :valid-player-option {:return 1})
+                            play-move (stub :play-move {:return "whole game is stubbed"})]
+                (start)
+                (should-have-invoked :valid-player-option {:times 1})
+                ))
+
+          (it "game begins with displaying an empty board"
+              (with-redefs [prompt/valid-player-option (stub :valid-player-option {:return 1})
+board/create-empty-board (stub :create {:return (empty-board)})
                             play-move (stub :play-move {:return "whole game is stubbed"})
                             writer/display (stub :display {:return "Board is displayed"}) ]
                 (start)

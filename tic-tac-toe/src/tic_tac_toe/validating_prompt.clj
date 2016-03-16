@@ -49,3 +49,8 @@
       )
     )
   )
+
+(defn valid-player-option[]
+  (writer/prompt-for-player-option)
+  (to-number (reader/read-input))
+  )

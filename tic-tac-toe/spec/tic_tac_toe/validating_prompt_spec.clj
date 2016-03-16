@@ -14,7 +14,7 @@
           (around [it]
                   (with-out-str (it)))
 
-          (it "asks for input and reads it in"
+          (it "asks for next move and reads it in"
               (should= (zero-based 5)
                        (with-in-str "5\n"
                          (valid-next-move (empty-board)))))
@@ -27,14 +27,14 @@
                                                        (valid-next-move (empty-board)))))))
 
 
-          (it "reprompts until a appropriate number is provided"
+          (it "reprompts for next move until a appropriate value is provided"
               (should-invoke writer/invalid-space-message {:times 2}
                              (should-invoke writer/prompt-for-next-move {:times 3}
                                             (should= (zero-based 5)
                                                      (with-in-str "44\n0\n5"
                                                        (valid-next-move (empty-board)))))))
 
-          (it "displays board when an invalid input is provided"
+          (it "displays board when an invalid input is provided for next move"
               (should-invoke writer/invalid-space-message {:times 2}
                              (should-invoke writer/display {:times 2}
                                             (should= (zero-based 5)
@@ -42,8 +42,20 @@
                                                        (valid-next-move (empty-board)))))))
 
 
-          (it "gives different error messages depending on the invalid input"
+          (it "gives different error messages depending on the invalid input for next move"
               (should-invoke writer/invalid-space-message {:times 1}
                              (should-invoke writer/not-numeric-message {:times 1}
                                             (with-in-str "1\nG\n9\n"
-                                              (valid-next-move [X nil nil nil nil nil nil nil nil]))))))
+                                              (valid-next-move [X nil nil nil nil nil nil nil nil])))))
+
+
+          (it "prompts and reads in player option"
+              (should-invoke writer/prompt-for-player-option {:times 1}
+
+                             (should= 1 (with-in-str "1\n"
+                                          (valid-player-option))))
+              )
+
+
+
+          )

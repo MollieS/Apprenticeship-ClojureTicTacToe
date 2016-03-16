@@ -35,7 +35,6 @@
               (should= "\n [ X ] [ 2 ] [ O ] \n [ 4 ] [ 5 ] [ X ] \n [ 7 ] [ 8 ] [ 9 ]\n"
                        (with-out-str (display [X nil O nil nil X nil nil nil]))))
 
-
          (it "displays player options"
             (should= "Choose player option:\n(1) Human vs Human\n"
                     (with-out-str ( prompt-for-player-option)))) )

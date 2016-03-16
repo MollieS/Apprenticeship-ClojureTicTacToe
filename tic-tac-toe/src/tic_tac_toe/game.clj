@@ -29,7 +29,8 @@
   )
 
 (defn start[]
-  (let [board (empty-board)]
+  (let [player-choice (prompt/valid-player-option)
+        board (empty-board)]
     (writer/display board)
     (play-move board)))
 
