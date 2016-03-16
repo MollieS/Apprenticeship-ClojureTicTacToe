@@ -5,5 +5,5 @@
 (describe "Command Line Reader"
           (it "reads input"
               (should= "1"
-                       (with-in-str "1"
+                       (with-in-str "1\n"
                          (read-input)))))
