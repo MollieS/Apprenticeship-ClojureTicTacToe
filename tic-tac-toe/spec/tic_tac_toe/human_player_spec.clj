@@ -1,6 +1,6 @@
-(ns tic-tac-toe.player-spec
+(ns tic-tac-toe.human-player-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toe.player :refer :all]
+            [tic-tac-toe.human-player :refer :all]
             [tic-tac-toe.validating-prompt :as prompt]))
 
 (defn- empty-board []

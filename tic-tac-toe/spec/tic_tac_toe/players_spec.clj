@@ -2,7 +2,7 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.players :refer :all]
             [tic-tac-toe.marks :refer :all]
-            [tic-tac-toe.player :as player]))
+            [tic-tac-toe.human-player :as human-player]))
 
 
 (describe "Players"

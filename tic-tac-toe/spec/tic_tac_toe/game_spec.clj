@@ -5,7 +5,7 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
-            [tic-tac-toe.player :as player]
+            [tic-tac-toe.human-player :as human-player]
             [tic-tac-toe.players :as players]))
 
 (defn- empty-board[]
@@ -35,7 +35,7 @@
                 (should-have-invoked :display {:times 1})))
 
           (it "takes the next move from the player"
-              (with-redefs [player/choose-move (stub :player {:return 2})]
+              (with-redefs [human-player/choose-move (stub :player {:return 2})]
                 (play-move [O nil nil nil O X nil nil X] players/human-human)
                 (should-have-invoked :player {:times 1})
                 )
