@@ -2,7 +2,8 @@
   (:require [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.marks :as marks]))
+            [tic-tac-toe.marks :as marks]
+            [tic-tac-toe.player :as player]))
 
 (defn- empty-board []
 (board/create-empty-board))
@@ -17,7 +18,7 @@
 (not (board/free-spaces? board)))
 
 (defn play-move [board]
-  (let [updated-board (board/place-mark board (marks/next-mark board) (prompt/get-valid-next-move board) )]
+  (let [updated-board (board/place-mark board (marks/next-mark board) (player/choose-move board) )]
     (writer/display updated-board)
     (cond
       (has-win? updated-board) (announce-win updated-board)

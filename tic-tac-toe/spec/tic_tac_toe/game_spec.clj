@@ -4,7 +4,8 @@
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.validating-prompt :as prompt]
-            [tic-tac-toe.writer :as writer]))
+            [tic-tac-toe.writer :as writer]
+            [tic-tac-toe.player :as player]))
 
 (defn- empty-board[]
   (vec (repeat 9 nil)))
@@ -23,7 +24,7 @@
 
           (it "game begins with displaying an empty board"
               (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
-board/create-empty-board (stub :create {:return (empty-board)})
+                            board/create-empty-board (stub :create {:return (empty-board)})
                             play-move (stub :play-move {:return "whole game is stubbed"})
                             writer/display (stub :display {:return "Board is displayed"}) ]
                 (start)
@@ -31,6 +32,13 @@ board/create-empty-board (stub :create {:return (empty-board)})
                 (should-have-invoked :create {:times 1})
                 (should-have-invoked :play-move {:times 1})
                 (should-have-invoked :display {:times 1})))
+
+          (it "takes the next move from the player"
+              (with-redefs [player/choose-move (stub :player {:return 2})]
+                (play-move [O nil nil nil O X nil nil X])
+                (should-have-invoked :player {:times 1})
+                )
+              )
 
           (it "displays board with each move"
               (with-redefs [writer/display (stub :display {:return "Board is displayed"})]
