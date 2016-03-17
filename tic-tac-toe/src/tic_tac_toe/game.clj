@@ -13,8 +13,12 @@
   (board/winning-line? board))
 
 (defn- no-free-spaces? [board]
-(not (board/free-spaces? board)))
+  (not (board/free-spaces? board)))
 
+(defn play-single-move [players board mark]
+  (board/place-mark board mark
+                    ((get players mark) board) )
+  )
 
 (defn announce-win [board]
   (writer/display board)
@@ -26,8 +30,7 @@
 
 (defn play-move [board players]
   (let [next-mark (marks/next-mark board)
-        updated-board (board/place-mark board next-mark
-                                        ((get players next-mark) board) )]
+        updated-board (play-single-move players board next-mark)]
     (cond
       (has-win? updated-board) (announce-win updated-board)
       (no-free-spaces? updated-board) (announce-draw updated-board)

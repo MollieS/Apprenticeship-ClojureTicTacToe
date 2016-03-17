@@ -38,13 +38,9 @@
                 (should-have-invoked :play-move {:times 1})
                 ))
 
-          (it "takes the next move from the player"
-              ;(with-redefs [human-player/choose-move (stub :player {:return 2})]
-              ; split into one move method and recurstibe move
-              (should= "The game has been won by X!"
-                   (play-move [O nil nil nil O X nil nil X] fake-players))
-              ;  (should-have-invoked :player {:times 1})
-              ;  )
+          (it "players move updates the board"
+              (should= [O nil X nil O X nil nil X]
+                   (play-single-move fake-players [O nil nil nil O X nil nil X] X))
               )
 
           (it "displays board game is won"
