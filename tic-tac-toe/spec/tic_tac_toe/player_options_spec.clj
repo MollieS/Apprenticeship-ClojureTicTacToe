@@ -9,7 +9,7 @@
                        (count player-options)))
 
           (it "has display format"
-              (should= "(1) Human vs Human\n(2) Random vs Human\n(3) Human vs Random\n"
+              (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n "
                        (display)))
 
          (it "valid choices"

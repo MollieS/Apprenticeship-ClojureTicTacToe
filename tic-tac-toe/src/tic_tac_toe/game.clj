@@ -36,7 +36,7 @@
   (let [player-choice (prompt/get-valid-player-option)
         board (empty-board)]
     (writer/display board)
-    (play-move board players/human-human)))
+    (play-move board (players/configure-players player-choice))))
 
 (defn -main[]
   (start))

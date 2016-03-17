@@ -1,5 +1,6 @@
 (ns tic-tac-toe.writer
-  (:require [tic-tac-toe.board :as board]))
+  (:require [tic-tac-toe.board :as board]
+            [tic-tac-toe.player-options :as player-options]))
 
 (defn- one-based[index]
   (+ 1 index))
@@ -41,7 +42,7 @@
   (apply println (border (board/get-rows (vec (board-with-one-based-indicies board))))))
 
  (defn prompt-for-player-option []
-   (println "Choose player option:\n(1) Human vs Human"))
+   (println "Choose player option:\n" (player-options/display)))
 
 (defn invalid-player-option-message[]
   (println "Not a valid player option!"))

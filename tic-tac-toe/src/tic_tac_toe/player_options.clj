@@ -6,7 +6,7 @@
     3 "Human vs Random"})
 
 (defn display[]
-  (apply str (map (fn[[k v]] (str "(" k ") " v "\n")) player-options)))
+  (apply str (map (fn[[k v]] (str "(" k ") " v "\n ")) player-options)))
 
 (defn valid-player-options[]
  (keys player-options))
