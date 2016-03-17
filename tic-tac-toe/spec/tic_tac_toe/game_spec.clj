@@ -11,6 +11,11 @@
 (defn- empty-board[]
   (vec (repeat 9 nil)))
 
+(def fake-players
+  {X (fn[board] 2)
+   O (fn[board] -1) }
+  )
+
 (describe "Tic Tac Toe"
           (with-stubs)
           (around [it]
@@ -23,29 +28,36 @@
                 (should-have-invoked :valid-player-option {:times 1})
                 ))
 
-          (it "game begins with displaying an empty board"
+          (it "game begins with an empty board"
               (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
                             board/create-empty-board (stub :create {:return (empty-board)})
-                            play-move (stub :play-move {:return "whole game is stubbed"})
-                            writer/display (stub :display {:return "Board is displayed"}) ]
+                            play-move (stub :play-move {:return "whole game is stubbed"})]
                 (start)
 
                 (should-have-invoked :create {:times 1})
                 (should-have-invoked :play-move {:times 1})
-                (should-have-invoked :display {:times 1})))
+                ))
 
           (it "takes the next move from the player"
-              (with-redefs [human-player/choose-move (stub :player {:return 2})]
-                (play-move [O nil nil nil O X nil nil X] players/human-human)
-                (should-have-invoked :player {:times 1})
+              ;(with-redefs [human-player/choose-move (stub :player {:return 2})]
+              ; split into one move method and recurstibe move
+              (should= "The game has been won by X!"
+                   (play-move [O nil nil nil O X nil nil X] fake-players))
+              ;  (should-have-invoked :player {:times 1})
+              ;  )
+              )
+
+          (it "displays board game is won"
+              (with-redefs [writer/display (stub :display {:return "Board is displayed"})]
+                (announce-win [X O O nil X nil nil X nil])
+                (should-have-invoked :display {:times 1})
                 )
               )
 
-          (it "displays board with each move"
-              (with-redefs [writer/display (stub :display {:return "Board is displayed"})]
-                ( with-in-str "3\n4\n9\n"
-                  (play-move [X O nil nil X O O X nil] players/human-human))
-                (should-have-invoked :display {:times 3})
+          (it "displays board when game is drawn"
+              (with-redefs [writer/display (stub :display {:return "Board is displayed"}) ]
+                (announce-draw [X O X X X O O X O])
+                (should-have-invoked :display {:times 1})
                 )
               )
 

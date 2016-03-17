@@ -12,6 +12,6 @@
               (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n "
                        (display)))
 
-         (it "valid choices"
-          (should= '(1 2 3)
-                  (valid-player-options))))
+          (it "valid choices"
+              (should= '(1 2 3)
+                       (valid-player-options))))

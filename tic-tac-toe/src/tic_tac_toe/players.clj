@@ -5,20 +5,19 @@
 
 
 (def human-human
-  { X #(human-player/choose-move %)
-   O #(human-player/choose-move %) })
+  { X human-player/choose-move
+   O human-player/choose-move  })
 
 (def random-human
-  { X #(random-player/choose-move %)
-   O #(human-player/choose-move %) })
+  { X random-player/choose-move
+   O human-player/choose-move  })
 
 (def human-random
-  { X #(human-player/choose-move %)
-   O #(random-player/choose-move %) })
-
+  { X human-player/choose-move
+   O random-player/choose-move })
 
 (defn configure-players [game-option]
-  (cons
+  (cond
     (= game-option 1) human-human
     (= game-option 2) random-human
     (= game-option 3) human-random
