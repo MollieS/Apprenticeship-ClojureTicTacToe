@@ -2,50 +2,81 @@
   (:require [tic-tac-toe.writer :as writer]
             [tic-tac-toe.reader :as reader]
             [tic-tac-toe.board :as board]
+            [tic-tac-toe.player-options :as player-options]
             ))
-
-(defn- zero-based [index]
-  (- index 1))
-
-(defn- vacant-space[index spaces-on-board]
-  (boolean (some #(= index %) spaces-on-board))
-  )
-
-(defn- show-invalid-message [error-msg board]
-  (writer/display board)
-  (error-msg))
-
-(defn- validate-input-is-within-range [provided-index board]
-  (if (vacant-space provided-index (board/indicies-of-free-spaces board))
-    true
-    (do
-      (show-invalid-message writer/invalid-space-message board)
-      false
-      ))
-  )
 
 (defn- to-number [input]
   (Integer/parseInt input))
 
-(defn- validate-input-is-numeric [input board]
+(defn- zero-based-number [index]
+  (- (to-number index) 1))
+
+(defn- show-board-with-invalid-message [error-msg board]
+  (writer/display board)
+  (error-msg))
+
+(defn- includes? [value valid-range]
+  (boolean (some #(= value %) valid-range)))
+
+(defn- validate-input-is-within-range [input valid-range error-msg]
+  (if (includes? input (valid-range))
+    true
+    (do
+      (error-msg)
+      false
+      )))
+
+(defn- validate-input-is-numeric [input error-msg]
   (try
     (to-number input)
     true
     (catch Exception e
-      (show-invalid-message writer/not-numeric-message board)
+      (error-msg)
       false
       )
     ))
 
-(defn valid-next-move[board]
-  (writer/prompt-for-next-move)
-
-  (let [input (reader/read-input)]
-
-    (if (and (validate-input-is-numeric input board)
-             (validate-input-is-within-range (zero-based (to-number input)) board))
-      (zero-based (to-number input))
-      (valid-next-move board)
+(defn- validation-criteria-for-player-option [input]
+  (and
+    (validate-input-is-numeric input writer/not-numeric-message)
+    (validate-input-is-within-range
+      (to-number input)
+      player-options/valid-player-options
+      writer/invalid-player-option-message
       )
     )
   )
+
+(defn- validation-criteria-for-next-move [board input]
+  (and
+    (validate-input-is-numeric input #(show-board-with-invalid-message writer/not-numeric-message board))
+    (validate-input-is-within-range
+      (zero-based-number input)
+      #(board/indicies-of-free-spaces board)
+      #(show-board-with-invalid-message writer/invalid-space-message board)
+      )))
+
+(defn- validate-input[prompt-user valid-conditions format-input]
+  (prompt-user)
+
+  (let [input (reader/read-input)]
+    (if (valid-conditions input)
+      (format-input input)
+      (validate-input prompt-user valid-conditions format-input)
+      )
+    )
+  )
+
+(defn get-valid-player-option[]
+  (validate-input
+    writer/prompt-for-player-option
+    validation-criteria-for-player-option
+    to-number
+    ))
+
+(defn get-valid-next-move[board]
+  (validate-input
+    writer/prompt-for-next-move
+    #(validation-criteria-for-next-move board %)
+    zero-based-number
+    ))

@@ -33,4 +33,12 @@
 
           (it "displays board with occupied cells"
               (should= "\n [ X ] [ 2 ] [ O ] \n [ 4 ] [ 5 ] [ X ] \n [ 7 ] [ 8 ] [ 9 ]\n"
-                       (with-out-str (display [X nil O nil nil X nil nil nil])))))
+                       (with-out-str (display [X nil O nil nil X nil nil nil]))))
+
+         (it "displays player options"
+            (should= "Choose player option:\n(1) Human vs Human\n"
+                    (with-out-str ( prompt-for-player-option))))
+
+         (it "displays invalid message when input is not a valid player option"
+            (should= "Not a valid player option!\n"
+                    (with-out-str (invalid-player-option-message)))))

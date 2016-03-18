@@ -14,8 +14,16 @@
           (around [it]
                   (with-out-str (it)))
 
-          (it "game starts by displaying an empty board"
-              (with-redefs [board/create-empty-board (stub :create {:return (empty-board)})
+          (it "game determines player options"
+              (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
+                            play-move (stub :play-move {:return "whole game is stubbed"})]
+                (start)
+                (should-have-invoked :valid-player-option {:times 1})
+                ))
+
+          (it "game begins with displaying an empty board"
+              (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
+board/create-empty-board (stub :create {:return (empty-board)})
                             play-move (stub :play-move {:return "whole game is stubbed"})
                             writer/display (stub :display {:return "Board is displayed"}) ]
                 (start)
@@ -49,12 +57,12 @@
               )
 
           (it "announces win"
-              (with-redefs [prompt/valid-next-move (stub :next-move {:return 3}) ]
+              (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 3}) ]
                 (should-contain "The game was won by X"
                                 (with-out-str (play-move [X O nil nil O nil X X O])))))
 
           (it "announces draw"
-              (with-redefs [prompt/valid-next-move (stub :next-move {:return 2})]
+              (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 2})]
                 (should-contain "The game was a draw"
                                 (with-out-str (play-move [X O nil O X X O X O])))))
 

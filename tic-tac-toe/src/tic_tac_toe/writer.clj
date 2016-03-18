@@ -39,3 +39,9 @@
 
 (defn display [board]
   (apply println (border (board/get-rows (vec (board-with-one-based-indicies board))))))
+
+ (defn prompt-for-player-option []
+   (println "Choose player option:\n(1) Human vs Human"))
+
+(defn invalid-player-option-message[]
+  (println "Not a valid player option!"))
