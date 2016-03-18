@@ -15,21 +15,18 @@
                 (should= human-player/choose-move
                          (get human-human X))
                 (should= human-player/choose-move
-                         (get human-human O)
-                         )))
+                         (get human-human O))))
 
           (it "finds player configuration for random vs human"
               (let [random-human (configure-players 2)]
                 (should= random-player/choose-move
                          (get random-human X))
                 (should= human-player/choose-move
-                         (get random-human O)
-                         )))
+                         (get random-human O))))
 
           (it "finds player configuration for human vs random"
               (let [human-random (configure-players 3)]
                 (should= human-player/choose-move
                          (get human-random X))
                 (should= random-player/choose-move
-                         (get human-random O))
-                )))
+                         (get human-random O)))))

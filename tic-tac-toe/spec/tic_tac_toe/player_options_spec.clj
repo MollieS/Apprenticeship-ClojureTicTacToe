@@ -14,4 +14,14 @@
 
           (it "valid choices"
               (should= '(1 2 3)
-                       (valid-player-options))))
+                       (valid-player-options)))
+
+          (it "has an id for human vs human"
+              (should= 1
+                       human-human-id))
+
+          (it "has an id for random vs human"
+              (should= 2 random-human-id))
+
+          (it "has an id for human vs random"
+              (should= 3 human-random-id)))

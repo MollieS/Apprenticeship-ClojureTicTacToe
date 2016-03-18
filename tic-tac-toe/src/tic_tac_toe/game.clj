@@ -17,8 +17,7 @@
 
 (defn play-single-move [players board mark]
   (board/place-mark board mark
-                    ((get players mark) board) )
-  )
+                    ((get players mark) board)))
 
 (defn announce-win [board]
   (writer/display board)
