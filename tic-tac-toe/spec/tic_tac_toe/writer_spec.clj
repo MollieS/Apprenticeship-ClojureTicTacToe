@@ -1,7 +1,8 @@
 (ns tic-tac-toe.writer-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.writer :refer :all]
-            [tic-tac-toe.marks :refer :all]))
+            [tic-tac-toe.marks :refer :all]
+            [tic-tac-toe.player-options :as player-options]))
 
 (describe "Command Line Writer"
           (around [it]
@@ -36,7 +37,7 @@
                        (with-out-str (display [X nil O nil nil X nil nil nil]))))
 
          (it "displays player options"
-            (should= "Choose player option:\n(1) Human vs Human\n"
+            (should= (str "Choose player option:\n " (player-options/display) "\n")
                     (with-out-str ( prompt-for-player-option))))
 
          (it "displays invalid message when input is not a valid player option"
