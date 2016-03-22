@@ -43,7 +43,7 @@
               (should= [O nil X nil O X nil nil X]
                    (play-single-move fake-players [O nil nil nil O X nil nil X] X)))
 
-          (it "displays board game is won"
+          (it "displays board when game is won"
               (with-redefs [writer/display (stub :display {:return "Board is displayed"})]
                 (announce-win [X O O nil X nil nil X nil])
                 (should-have-invoked :display {:times 1})))
