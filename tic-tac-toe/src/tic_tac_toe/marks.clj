@@ -12,3 +12,9 @@
     X
     O)
   )
+
+(defn opponent [player-symbol]
+ (if (= player-symbol X)
+   O
+   X)
+  )
