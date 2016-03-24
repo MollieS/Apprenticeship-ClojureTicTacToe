@@ -55,12 +55,10 @@
 
     (if (game-over? updated-board)
         (if (replay?)
-            (play-move (empty-board) (get-players)))
-          (writer/display-exit-message)
-          )))
+            (play-move (empty-board) (get-players))))))
 
 (defn start[]
-    (play-move (empty-board) ) (get-players))
+    (play-move (empty-board) (get-players)))
 
 (defn -main[]
   (start))
