@@ -1,6 +1,7 @@
 (ns tic-tac-toe.writer
   (:require [tic-tac-toe.board :as board]
-            [tic-tac-toe.player-options :as player-options]))
+            [tic-tac-toe.player-options :as player-options]
+            [tic-tac-toe.replay-options :as replay-option]))
 
 (defn- one-based[index]
   (+ 1 index))
@@ -48,4 +49,4 @@
   (println "Not a valid player option!"))
 
 (defn prompt-for-replay []
-   (println "Play again? (Y/y to replay)"))
+     (println (str "Play again? (" replay-option/replay-option " to replay)")))

@@ -45,5 +45,5 @@
                     (with-out-str (invalid-player-option-message))))
 
          (it "displays replay option"
-            (should= "Play again? (Y/y to replay)\n"
+            (should= "Play again? (Y to replay)\n"
              (with-out-str (prompt-for-replay)))))

@@ -25,17 +25,6 @@
           (around [it]
                   (with-out-str (it)))
 
-          (it "game can be played mulitple times"
-              (with-redefs [announce-win (stub :announce-win {:return "Winner"})
-                            announce-draw (stub :announce-draw {:return "Draw"})]
-
-                (with-in-str "4\nY\n1\n1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
-                  (with-out-str
-                    (play-move (populated-board) players/human-human))))
-
-              (should-have-invoked :announce-draw {:times 1})
-              (should-have-invoked :announce-win {:times 1}))
-
           (it "game prompts for player option"
               (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
                             play-move (stub :play-move {:return "whole game is stubbed"})]
@@ -68,8 +57,8 @@
                 (announce-draw [X O X X X O O X O])
                 (should-have-invoked :display {:times 1})))
 
-          (it "checks for a win after each move to see if game is over"
-              (with-redefs[ game-over? (stub :game-over?)
+          (it "checks for a win after each move"
+              (with-redefs[game-over? (stub :game-over?)
                            board/winning-line? (stub :winning-line? {:return false})
                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
                 ( with-in-str "3\n4\n9\n"
@@ -104,4 +93,15 @@
               (should-contain "The game was a draw"
                               (with-in-str "1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
                                 (with-out-str
-                                  (play-move (empty-board) players/human-human))))))
+                                  (play-move (empty-board) players/human-human)))))
+
+          (it "game can be played mulitple times"
+              (with-redefs [announce-win (stub :announce-win {:return "Winner"})
+                            announce-draw (stub :announce-draw {:return "Draw"})]
+
+                (with-in-str "4\nY\n1\n1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
+                  (with-out-str
+                    (play-move (populated-board) players/human-human))))
+
+              (should-have-invoked :announce-draw {:times 1})
+              (should-have-invoked :announce-win {:times 1})))

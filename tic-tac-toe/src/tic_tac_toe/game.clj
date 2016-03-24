@@ -50,8 +50,7 @@
       (has-win? updated-board) (announce-win updated-board)
       (no-free-spaces? updated-board) (announce-draw updated-board)
       :else
-      (play-move updated-board players)
-      )
+      (play-move updated-board players))
 
     (if (game-over? updated-board)
         (if (replay?)
