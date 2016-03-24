@@ -7,18 +7,23 @@
 (defn- minimax-wins? [board minimax-symbol]
   (= (board/winning-symbol board) minimax-symbol))
 
+(defn- score-opponent-win [board]
+  (- -10 (count (board/indicies-of-free-spaces board))))
+
+(defn- score-minimax-win [board]
+  (+ 10  (count (board/indicies-of-free-spaces board))))
+
+(defn- draw? [board]
+  (not (board/free-spaces? board)))
+
+(defn- score-for-win [board minimax-symbol]
+  (do
+    (cond
+      (minimax-wins? board minimax-symbol) (score-minimax-win board)
+      :else
+      (score-opponent-win board))))
 
 (defn score [board minimax-symbol]
   (cond
-    (board/winning-line? board)
-    (do
-      (cond
-        (minimax-wins? board minimax-symbol) (+ 10  (count (board/indicies-of-free-spaces board)))
-        :else
-        (- -10 (count (board/indicies-of-free-spaces board)))))
-    (not (board/free-spaces? board)) 0
-    )
-
-
-
-  )
+    (board/winning-line? board) (score-for-win board minimax-symbol)
+    (draw? board) 0))
