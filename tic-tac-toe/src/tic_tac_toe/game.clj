@@ -4,7 +4,8 @@
             [tic-tac-toe.writer :as writer]
             [tic-tac-toe.board :as board]
             [tic-tac-toe.marks :as marks]
-            [tic-tac-toe.players :as players]))
+            [tic-tac-toe.players :as players]
+            [tic-tac-toe.replay-options :as replay]))
 
 (defn- empty-board []
   (board/create-empty-board))
@@ -38,10 +39,8 @@
 
 (defn play-move [board players]
 
-  ;(println (writer/display board))
   (let [next-mark (marks/next-mark board)
         updated-board (play-single-move players board next-mark)]
-  ;(println (writer/display updated-board))
     (cond
       (has-win? updated-board) (announce-win updated-board)
       (no-free-spaces? updated-board) (announce-draw updated-board)
@@ -52,7 +51,7 @@
     (if (game-over? updated-board)
       (let [replay-choice (prompt/get-valid-replay-option)]
         (if
-          (= replay-choice "Y") (let [player-choice (player-choice)
+          (= replay-choice replay/replay-option) (let [player-choice (player-choice)
                                       board (empty-board)]
                                   (play-move board (players/configure-players player-choice)))
 

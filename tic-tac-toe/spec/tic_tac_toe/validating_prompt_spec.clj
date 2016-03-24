@@ -76,5 +76,4 @@
               (should-invoke writer/prompt-for-replay {:times 1}
                              (should= "Y"
                                       (with-in-str "y\n"
-                                          (get-valid-replay-option)))))
-          )
+                                          (get-valid-replay-option))))))
