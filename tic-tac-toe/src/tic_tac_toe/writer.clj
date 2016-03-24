@@ -46,3 +46,9 @@
 
 (defn invalid-player-option-message[]
   (println "Not a valid player option!"))
+
+(defn prompt-for-replay []
+   (println "Play again? (Y/y to replay)"))
+
+(defn display-exit-message []
+ (println "Thanks for playing! Goodbye!"))

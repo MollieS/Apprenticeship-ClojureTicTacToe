@@ -18,6 +18,9 @@
 (defn- includes? [value valid-range]
   (boolean (some #(= value %) valid-range)))
 
+(defn- capitalise[input]
+ (clojure.string/upper-case input))
+
 (defn- validate-input-is-within-range [input valid-range error-msg]
   (if (includes? input (valid-range))
     true
@@ -56,6 +59,9 @@
       #(show-board-with-invalid-message writer/invalid-space-message board)
       )))
 
+(defn- validation-criteria-for-replay-option [input]
+  true )
+
 (defn- validate-input[prompt-user valid-conditions format-input]
   (prompt-user)
 
@@ -79,4 +85,11 @@
     writer/prompt-for-next-move
     #(validation-criteria-for-next-move board %)
     zero-based-number
+    ))
+
+(defn get-valid-replay-option []
+  (validate-input
+    writer/prompt-for-replay
+    validation-criteria-for-replay-option
+    capitalise
     ))
