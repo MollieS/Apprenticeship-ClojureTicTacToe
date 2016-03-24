@@ -10,4 +10,9 @@
 
           (it "scores -10 minus depth when opponent wins"
               (should= -14 (score [O X nil O X nil O nil nil] X)))
+
+         (it "scores 0 for a draw"
+            (should= 0 (score [X O X O X X O X O] X))
+             )
+
           )

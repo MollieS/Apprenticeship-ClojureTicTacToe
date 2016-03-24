@@ -9,9 +9,16 @@
 
 
 (defn score [board minimax-symbol]
-  (if (board/winning-line? board)
+  (cond
+    (board/winning-line? board)
     (do
       (cond
         (minimax-wins? board minimax-symbol) (+ 10  (count (board/indicies-of-free-spaces board)))
         :else
-        (- -10 (count (board/indicies-of-free-spaces board)))))))
+        (- -10 (count (board/indicies-of-free-spaces board)))))
+    (not (board/free-spaces? board)) 0
+    )
+
+
+
+  )
