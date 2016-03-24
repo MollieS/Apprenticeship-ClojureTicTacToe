@@ -16,6 +16,15 @@
 (defn- no-free-spaces? [board]
   (not (board/free-spaces? board)))
 
+(defn- player-choice []
+  (prompt/get-valid-player-option))
+
+(defn- replay? []
+  (= (prompt/get-valid-replay-option) replay/replay-option))
+
+(defn get-players []
+  (players/configure-players (player-choice)))
+
 (defn play-single-move [players board mark]
   (board/place-mark board mark
                     ((get players mark) board)))
@@ -33,12 +42,8 @@
   (writer/display board)
   (writer/draw-message))
 
-(defn- player-choice []
-  (prompt/get-valid-player-option)
-  )
 
 (defn play-move [board players]
-
   (let [next-mark (marks/next-mark board)
         updated-board (play-single-move players board next-mark)]
     (cond
@@ -49,23 +54,13 @@
       )
 
     (if (game-over? updated-board)
-      (let [replay-choice (prompt/get-valid-replay-option)]
-        (if
-          (= replay-choice replay/replay-option) (let [player-choice (player-choice)
-                                      board (empty-board)]
-                                  (play-move board (players/configure-players player-choice)))
-
-           (writer/display-exit-message)
-          )
-        ))
-    )
-
-  )
+        (if (replay?)
+            (play-move (empty-board) (get-players)))
+          (writer/display-exit-message)
+          )))
 
 (defn start[]
-  (let [player-choice (player-choice)
-        board (empty-board)]
-    (play-move board (players/configure-players player-choice))))
+    (play-move (empty-board) ) (get-players))
 
 (defn -main[]
   (start))
