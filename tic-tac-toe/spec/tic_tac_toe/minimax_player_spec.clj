@@ -23,7 +23,7 @@
                              (choose-move draw-board)))
 
           (it "calculates score when there is a win on the board"
-              (should-invoke calculate-score {:times 5}
+              (should-invoke calculate-score {:times 1}
                             (choose-move win-board)))
 
           (it "takes winning move on top row"
