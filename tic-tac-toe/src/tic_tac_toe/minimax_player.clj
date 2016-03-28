@@ -3,75 +3,80 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.marks :as marks]))
 
-(defn- minimax-wins? [board minimax-symbol]
-  (= (board/winning-symbol board) minimax-symbol))
+(def DRAW-SCORE 0)
+(def MAX-SCORE 10)
+(def MIN-SCORE -10)
+(def DUMMY-POSITION -1)
 
-(defn- score-opponent-win [board remaining-depth]
-  (- -10 remaining-depth))
+(defn- max-player-winning-score [depth]
+  (println "max player score is" (+ MAX-SCORE depth))
+  (+ MAX-SCORE depth))
 
-(defn- score-minimax-win [board remaining-depth]
-  (+ 10 remaining-depth))
+(defn- min-player-winning-score [depth]
+  (- MIN-SCORE depth))
 
-(defn- draw? [board]
-  (not (board/free-spaces? board)))
+(defn- get-winning-score [max-player-symbol board depth]
+  (if (= max-player-symbol (board/winning-symbol board))
+    (max-player-winning-score depth)
+    (min-player-winning-score depth)))
 
-(defn- score-for-win [board minimax-symbol remaining-depth]
-  (do
-    (cond
-      (minimax-wins? board minimax-symbol) (score-minimax-win board remaining-depth)
-      :else
-      (score-opponent-win board remaining-depth))))
-
-(defn score [board minimax-symbol remaining-depth]
-  (cond
-    (board/winning-line? board) (score-for-win board minimax-symbol remaining-depth)
-    (draw? board) 0))
-
-(defn- game-over? [board depth]
-  (or (board/winning-line? board)
-      (draw? board)
-      (= 0 depth)))
-
-(defn- calculate-initial-score [board minimax-symbol]
-  (if (= minimax-symbol (marks/next-mark board))
-    -100
-    100
+(defn calculate-score [board max-player-symbol depth]
+  (if (board/winning-line? board)
+    (get-winning-score max-player-symbol board depth)
+    DRAW-SCORE
     )
   )
 
-(defn- get-best-position [is-minimax-player [best-score best-move] as best-pos [current-score current-move] as curr-pos current-position]
-  (if is-minimax-player
-    (if (< best-score current-score)
-      [current-score current-position]
-      best-pos)
-    (if (> best-score current-score)
-      [current-score current-position]
-      best-pos)
-    )
-  )
+(defn- find-position [best-score [head & tail]]
+  (let [[position score] head]
+    (if (= score best-score)
+      position
+      (find-position best-score tail))))
 
-; have tried to mimic my java one without pruning.
-; need to walk through this algorithm with the test cases to see what is wrong
-(defn- minimax [board minimax-symbol depth]
-  ; maybe destructure the init-best-position
-  (let [init-best-position (calculate-initial-score board minimax-symbol)]
+(defn- find-max [scores]
+  (let [max-score (apply max (map (fn [[position score]] score) scores))
+        max-position (find-position max-score scores)]
+    [max-position max-score]))
 
-    (if (game-over? board depth)
-      (score board minimax-symbol depth)
+(defn- find-min [scores]
+  (let [min-score (apply min (map (fn [[position score]] score) scores))
+        min-position (find-position min-score scores)]
+    [min-position min-score]))
 
-    (let [ [h & t] (board/indicies-of-free-spaces board)
-          next-symbol (marks/next-mark board)
-          updated-board (board/place-mark board next-symbol (Integer/parseInt h))
-          position (minimax updated-board minimax-symbol (- depth 1) )]
-      (println "next symbol is " next-symbol)
-      (println "updated board is " updated-board)
-      (println "position " position)
-      (get-best-position (= minimax-symbol next-symbol) init-best-position position (Integer/parseInt h))
-      ))
+(defn minimax [board depth is-max-player max-player-symbol]
+  (let [scores [[]]]
+
+    (if (or (= depth 0)
+            (board/winning-line? board))
+      [DUMMY-POSITION (calculate-score board max-player-symbol depth)])
+
+    (let [[first-free-spot & tail] (board/indicies-of-free-spaces board)]
+      ; not sure about this if statement but can't force a return from base condition
+      (if (not (= nil first-free-spot))
+        (do
+          (let [ updated-board (board/place-mark board (marks/next-mark board) first-free-spot)
+                [DUMMY-POSITION value]  (minimax updated-board (dec depth) (not is-max-player) max-player-symbol)
+                scores (conj [] [first-free-spot (second value)])])))
+      ; because everything is immutable, how do I add to the scores eacch time
+      ; cant pass it in the recursion as i need the return value fo the recursive loop
+      (println "scores are " scores)
+      (if is-max-player
+        (find-max scores)
+        (find-min scores)
+        )
+      )
     )
   )
 
 (defn choose-move [board]
-  (let [ minimax-symbol (marks/next-mark board)
-        [[best-score best-move]] (minimax board minimax-symbol (count (board/indicies-of-free-spaces board)))]
-    best-move))
+  (let [is-max-player true
+        max-player-symbol (marks/next-mark board)
+        [best-position best-score]
+        (minimax
+          board
+          (count (board/indicies-of-free-spaces board))
+          is-max-player
+          max-player-symbol)]
+    best-position
+    )
+  )
