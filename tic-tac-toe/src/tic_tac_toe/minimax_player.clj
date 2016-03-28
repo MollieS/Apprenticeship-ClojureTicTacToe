@@ -50,33 +50,35 @@
             (board/winning-line? board))
       [DUMMY-POSITION (calculate-score board max-player-symbol depth)])
 
-    (let [[first-free-spot & tail] (board/indicies-of-free-spaces board)]
-      ; not sure about this if statement but can't force a return from base condition
-      (if (not (= nil first-free-spot))
-        (do
-          (let [ updated-board (board/place-mark board (marks/next-mark board) first-free-spot)
-                [DUMMY-POSITION value]  (minimax updated-board (dec depth) (not is-max-player) max-player-symbol)
-                scores (conj [] [first-free-spot (second value)])])))
-      ; because everything is immutable, how do I add to the scores eacch time
-      ; cant pass it in the recursion as i need the return value fo the recursive loop
-      (println "scores are " scores)
-      (if is-max-player
-        (find-max scores)
-        (find-min scores)
-        )
+
+    (for [next-move (board/indicies-of-free-spaces board)]
+
+      (let [updated-board (board/place-mark board (marks/next-mark board) next-move)
+            [DUMMY-POSITION score]  (minimax
+                                      updated-board
+                                      (dec depth)
+                                      (not is-max-player)
+                                      max-player-symbol)
+            scores (conj scores [next-move (second score)])]))
+
+    ; because everything is immutable, how do I add to the scores eacch time
+    ; cant pass it in the recursion as i need the return value fo the recursive loop
+    (println "scores are " scores)
+    (if is-max-player
+      (find-max scores)
+      (find-min scores)
+      )
+    ))
+
+  (defn choose-move [board]
+    (let [is-max-player true
+          max-player-symbol (marks/next-mark board)
+          [best-position best-score]
+          (minimax
+            board
+            (count (board/indicies-of-free-spaces board))
+            is-max-player
+            max-player-symbol)]
+      best-position
       )
     )
-  )
-
-(defn choose-move [board]
-  (let [is-max-player true
-        max-player-symbol (marks/next-mark board)
-        [best-position best-score]
-        (minimax
-          board
-          (count (board/indicies-of-free-spaces board))
-          is-max-player
-          max-player-symbol)]
-    best-position
-    )
-  )
