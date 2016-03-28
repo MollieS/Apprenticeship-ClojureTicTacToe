@@ -64,4 +64,16 @@
                              (should-invoke writer/prompt-for-player-option {:times 2}
                                             (should= 1
                                                      (with-in-str "6\n1\n"
-                                                       (get-valid-player-option)))))))
+                                                       (get-valid-player-option))))))
+
+         (it "prompts and reads in replay option"
+              (should-invoke writer/prompt-for-replay {:times 1}
+                             (should= "Y"
+                                      (with-in-str "Y\n"
+                                          (get-valid-replay-option)))))
+
+         (it "translates replay option to capital"
+              (should-invoke writer/prompt-for-replay {:times 1}
+                             (should= "Y"
+                                      (with-in-str "y\n"
+                                          (get-valid-replay-option))))))

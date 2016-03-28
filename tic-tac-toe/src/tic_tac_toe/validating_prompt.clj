@@ -18,13 +18,15 @@
 (defn- includes? [value valid-range]
   (boolean (some #(= value %) valid-range)))
 
+(defn- capitalise[input]
+ (clojure.string/upper-case input))
+
 (defn- validate-input-is-within-range [input valid-range error-msg]
   (if (includes? input (valid-range))
     true
     (do
       (error-msg)
-      false
-      )))
+      false)))
 
 (defn- validate-input-is-numeric [input error-msg]
   (try
@@ -32,9 +34,7 @@
     true
     (catch Exception e
       (error-msg)
-      false
-      )
-    ))
+      false)))
 
 (defn- validation-criteria-for-player-option [input]
   (and
@@ -42,10 +42,7 @@
     (validate-input-is-within-range
       (to-number input)
       player-options/valid-player-options
-      writer/invalid-player-option-message
-      )
-    )
-  )
+      writer/invalid-player-option-message)))
 
 (defn- validation-criteria-for-next-move [board input]
   (and
@@ -53,8 +50,10 @@
     (validate-input-is-within-range
       (zero-based-number input)
       #(board/indicies-of-free-spaces board)
-      #(show-board-with-invalid-message writer/invalid-space-message board)
-      )))
+      #(show-board-with-invalid-message writer/invalid-space-message board))))
+
+(defn- validation-criteria-for-replay-option [input]
+  true)
 
 (defn- validate-input[prompt-user valid-conditions format-input]
   (prompt-user)
@@ -62,21 +61,22 @@
   (let [input (reader/read-input)]
     (if (valid-conditions input)
       (format-input input)
-      (validate-input prompt-user valid-conditions format-input)
-      )
-    )
-  )
+      (validate-input prompt-user valid-conditions format-input))))
 
 (defn get-valid-player-option[]
   (validate-input
     writer/prompt-for-player-option
     validation-criteria-for-player-option
-    to-number
-    ))
+    to-number))
 
 (defn get-valid-next-move[board]
   (validate-input
     writer/prompt-for-next-move
     #(validation-criteria-for-next-move board %)
-    zero-based-number
-    ))
+    zero-based-number))
+
+(defn get-valid-replay-option []
+  (validate-input
+    writer/prompt-for-replay
+    validation-criteria-for-replay-option
+    capitalise))

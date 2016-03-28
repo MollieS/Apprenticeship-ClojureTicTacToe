@@ -42,4 +42,8 @@
 
          (it "displays invalid message when input is not a valid player option"
             (should= "Not a valid player option!\n"
-                    (with-out-str (invalid-player-option-message)))))
+                    (with-out-str (invalid-player-option-message))))
+
+         (it "displays replay option"
+            (should= "Play again? (Y to replay)\n"
+             (with-out-str (prompt-for-replay)))))
