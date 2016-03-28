@@ -53,6 +53,7 @@
 ; have tried to mimic my java one without pruning.
 ; need to walk through this algorithm with the test cases to see what is wrong
 (defn- minimax [board minimax-symbol depth]
+  ; maybe destructure the init-best-position
   (let [init-best-position (calculate-initial-score board minimax-symbol)]
 
     (if (game-over? board depth)
