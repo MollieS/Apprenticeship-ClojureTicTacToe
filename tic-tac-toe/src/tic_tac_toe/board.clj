@@ -18,6 +18,7 @@
   (vec (repeat 9 nil)))
 
 (defn place-mark[board mark index]
+  (println "placing mark " mark " at position " index)
   (assoc board index mark))
 
 (defn get-mark-at-index [board index]
