@@ -44,14 +44,13 @@
                     ((get players mark) board)))
 
 (defn play-move [board players]
-  (let [next-mark (mark-of-next-player board)
-        updated-board (update-board-with-move players board next-mark)]
+  (loop [board board]
+    (let [next-mark (mark-of-next-player board)
+          updated-board (update-board-with-move players board next-mark)]
 
-    (loop [board updated-board]
-
-      (if (game-over? board)
-        (announce-result board)
-        (recur (update-board-with-move players board (mark-of-next-player board)))))))
+      (if (game-over? updated-board)
+        (announce-result updated-board)
+        (recur updated-board)))))
 
 (defn replay? []
     (= (prompt/get-replay-option) replay/replay-option))
