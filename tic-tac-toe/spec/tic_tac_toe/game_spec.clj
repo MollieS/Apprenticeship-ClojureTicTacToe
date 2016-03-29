@@ -63,7 +63,7 @@
                 (with-in-str "3\n4\n9\n"
                   (play-move [X O nil nil X O O X nil] players/human-human))
 
-                (should-have-invoked :winning-line? {:times 3})))
+                (should-have-invoked :winning-line? {:times 4})))
 
           (it "checks for a draw after each move until a win takes place"
               (with-redefs [no-free-spaces? (stub :checks-for-draw {:return false})

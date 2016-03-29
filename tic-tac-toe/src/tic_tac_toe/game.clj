@@ -13,21 +13,11 @@
 (defn- has-win? [board]
   (board/winning-line? board))
 
-(defn no-free-spaces? [board]
-  (not (board/free-spaces? board)))
-
 (defn- player-choice []
   (prompt/get-valid-player-option))
 
-(defn replay? []
-    (= (prompt/get-replay-option) replay/replay-option))
-
-(defn get-players []
-  (players/configure-players (player-choice)))
-
-(defn update-board-with-move [players board mark]
-  (board/place-mark board mark
-                    ((get players mark) board)))
+(defn no-free-spaces? [board]
+  (not (board/free-spaces? board)))
 
 (defn announce-win [board]
   (writer/display board)
@@ -37,14 +27,39 @@
   (writer/display board)
   (writer/draw-message))
 
+(defn- game-over? [updated-board]
+  (or (has-win? updated-board)
+      (no-free-spaces? updated-board)))
+
+(defn- announce-result [board]
+ (if (has-win? board)
+   (announce-win board)
+   (announce-draw board)))
+
+(defn- mark-of-next-player [board]
+  (marks/next-mark board))
+
+(defn update-board-with-move [players board mark]
+  (board/place-mark board mark
+                    ((get players mark) board)))
+
 (defn play-move [board players]
-  (let [next-mark (marks/next-mark board)
+  (let [next-mark (mark-of-next-player board)
         updated-board (update-board-with-move players board next-mark)]
-    (cond
-      (has-win? updated-board) (announce-win updated-board)
-      (no-free-spaces? updated-board) (announce-draw updated-board)
-      :else
-      (play-move updated-board players))))
+
+    (loop [next-mark next-mark
+           updated-board updated-board]
+
+      (if (game-over? updated-board)
+        (announce-result updated-board)
+        (recur (mark-of-next-player updated-board)
+               (update-board-with-move players updated-board (marks/next-mark updated-board)))))))
+
+(defn replay? []
+    (= (prompt/get-replay-option) replay/replay-option))
+
+(defn get-players []
+  (players/configure-players (player-choice)))
 
 (defn play-game []
   (let [board (empty-board)
