@@ -52,4 +52,4 @@
      (println (str "Play again? (" replay-option/replay-option " to replay)")))
 
 (defn goodbye-msg []
-  (println "Thanks for playing. Good bye!"))
+  (println "Thanks for playing. Goodbye!"))

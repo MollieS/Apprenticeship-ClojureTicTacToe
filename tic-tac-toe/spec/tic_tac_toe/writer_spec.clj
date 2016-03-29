@@ -49,5 +49,5 @@
              (with-out-str (prompt-for-replay))))
 
          (it "says goodbye"
-            (should= "Thanks for playing. Good bye!\n"
+            (should= "Thanks for playing. Goodbye!\n"
                      (with-out-str (goodbye-msg)))))
