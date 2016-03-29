@@ -70,10 +70,10 @@
               (should-invoke writer/prompt-for-replay {:times 1}
                              (should= "Y"
                                       (with-in-str "Y\n"
-                                          (get-valid-replay-option)))))
+                                          (get-replay-option)))))
 
          (it "translates replay option to capital"
               (should-invoke writer/prompt-for-replay {:times 1}
                              (should= "Y"
                                       (with-in-str "y\n"
-                                          (get-valid-replay-option))))))
+                                          (get-replay-option))))))

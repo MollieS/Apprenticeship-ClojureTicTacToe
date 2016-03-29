@@ -20,7 +20,7 @@
   (prompt/get-valid-player-option))
 
 (defn- replay? []
-  (= (prompt/get-valid-replay-option) replay/replay-option))
+  (= (prompt/get-replay-option) replay/replay-option))
 
 (defn get-players []
   (players/configure-players (player-choice)))

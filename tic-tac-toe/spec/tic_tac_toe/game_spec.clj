@@ -69,7 +69,7 @@
           (it "checks for a win after each move"
               (with-redefs[game-over? (stub :game-over?)
                            board/winning-line? (stub :winning-line? {:return false})
-                           prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                           prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 ( with-in-str "3\n4\n9\n"
                   (play-move [X O nil nil X O O X nil] players/human-human))
 
@@ -79,7 +79,7 @@
           (it "checks for a draw after each move until a win takes place"
               (with-redefs [game-over? (stub :game-over?)
                             board/free-spaces?(stub :free-spaces? {:return true})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 ( with-in-str "3\n4\n9\n"
                   (play-move [X O nil nil X O O X nil] players/human-human))
 
@@ -88,13 +88,13 @@
 
           (it "announces win"
               (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 3})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 (should-contain "The game was won by X"
                                 (with-out-str (play-move [X O nil nil O nil X X O] players/human-human)))))
 
           (it "announces draw"
               (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 2})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 (should-contain "The game was a draw"
                                 (with-out-str (play-move [X O nil O X X O X O] players/human-human)))))
 

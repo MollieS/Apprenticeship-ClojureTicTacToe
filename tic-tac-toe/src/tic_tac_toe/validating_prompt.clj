@@ -52,31 +52,27 @@
       #(board/indicies-of-free-spaces board)
       #(show-board-with-invalid-message writer/invalid-space-message board))))
 
-(defn- validation-criteria-for-replay-option [input]
-  true)
-
-(defn- validate-input[prompt-user valid-conditions format-input]
+(defn- validate-input-with-reprompt [prompt-user valid-conditions format-input]
   (prompt-user)
 
   (let [input (reader/read-input)]
     (if (valid-conditions input)
       (format-input input)
-      (validate-input prompt-user valid-conditions format-input))))
+      (validate-input-with-reprompt prompt-user valid-conditions format-input))))
 
 (defn get-valid-player-option[]
-  (validate-input
+  (validate-input-with-reprompt
     writer/prompt-for-player-option
     validation-criteria-for-player-option
     to-number))
 
 (defn get-valid-next-move[board]
-  (validate-input
+  (validate-input-with-reprompt
     writer/prompt-for-next-move
     #(validation-criteria-for-next-move board %)
     zero-based-number))
 
-(defn get-valid-replay-option []
-  (validate-input
-    writer/prompt-for-replay
-    validation-criteria-for-replay-option
-    capitalise))
+(defn get-replay-option []
+  (writer/prompt-for-replay)
+  (let [input (reader/read-input)]
+    (capitalise input)))
