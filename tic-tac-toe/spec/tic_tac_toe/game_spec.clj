@@ -11,7 +11,6 @@
 (defn- empty-board[]
   (board/create-empty-board))
 
-
 (defn- populated-board []
   [X X O nil O X X O O] )
 
@@ -42,6 +41,16 @@
 
                 (should-have-invoked :create {:times 1})
                 (should-have-invoked :play-move {:times 1})))
+
+          (it "game ends with goodbye"
+
+              (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
+                            play-move (stub :play-move {:return "whole game is stubbed"})
+                            writer/goodbye-msg (stub :goodbye ) ]
+
+                (start)
+
+                (should-have-invoked :goodbye {:times 1})))
 
           (it "players move updates the board"
               (should= [O nil X nil O X nil nil X]

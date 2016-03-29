@@ -42,7 +42,6 @@
   (writer/display board)
   (writer/draw-message))
 
-
 (defn play-move [board players]
   (let [next-mark (marks/next-mark board)
         updated-board (play-single-move players board next-mark)]
@@ -54,10 +53,12 @@
 
     (if (game-over? updated-board)
         (if (replay?)
-            (play-move (empty-board) (get-players))))))
+            (play-move (empty-board) (get-players)))))
+  )
 
 (defn start[]
-    (play-move (empty-board) (get-players)))
+  (play-move (empty-board) (get-players))
+  (writer/goodbye-msg))
 
 (defn -main[]
   (start))

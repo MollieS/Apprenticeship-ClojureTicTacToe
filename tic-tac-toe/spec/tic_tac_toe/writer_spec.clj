@@ -46,4 +46,8 @@
 
          (it "displays replay option"
             (should= "Play again? (Y to replay)\n"
-             (with-out-str (prompt-for-replay)))))
+             (with-out-str (prompt-for-replay))))
+
+         (it "says goodbye"
+            (should= "Thanks for playing. Good bye!\n"
+                     (with-out-str (goodbye-msg)))))
