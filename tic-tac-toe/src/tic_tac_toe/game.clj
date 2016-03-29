@@ -47,13 +47,11 @@
   (let [next-mark (mark-of-next-player board)
         updated-board (update-board-with-move players board next-mark)]
 
-    (loop [next-mark next-mark
-           updated-board updated-board]
+    (loop [updated-board updated-board]
 
       (if (game-over? updated-board)
         (announce-result updated-board)
-        (recur (mark-of-next-player updated-board)
-               (update-board-with-move players updated-board (marks/next-mark updated-board)))))))
+        (recur (update-board-with-move players updated-board (mark-of-next-player updated-board)))))))
 
 (defn replay? []
     (= (prompt/get-replay-option) replay/replay-option))
