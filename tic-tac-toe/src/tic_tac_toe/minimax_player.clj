@@ -3,10 +3,19 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.marks :as marks]))
 
+(declare minimax)
+
 (def DRAW-SCORE 0)
 (def MAX-SCORE 10)
 (def MIN-SCORE -10)
+(def INITIAL-MAX-SCORE -100)
+(def INITIAL-MIN-SCORE 100)
 (def DUMMY-POSITION -1)
+
+(defn- calculate-initial-score [is-max-player]
+  (if is-max-player
+    [DUMMY-POSITION INITIAL-MAX-SCORE]
+    [DUMMY-POSITION INITIAL-MIN-SCORE]))
 
 (defn- max-player-winning-score [depth]
   (println "max player score is" (+ MAX-SCORE depth))
@@ -20,12 +29,10 @@
     (max-player-winning-score depth)
     (min-player-winning-score depth)))
 
-(defn calculate-score [board max-player-symbol depth]
+(defn calculate-game-over-score [board max-player-symbol depth]
   (if (board/winning-line? board)
-    (get-winning-score max-player-symbol board depth)
-    DRAW-SCORE
-    )
-  )
+    [DUMMY-POSITION (get-winning-score max-player-symbol board depth)]
+    [DUMMY-POSITION DRAW-SCORE]))
 
 (defn- find-position [best-score [head & tail]]
   (let [[position score] head]
@@ -33,52 +40,77 @@
       position
       (find-position best-score tail))))
 
-(defn- find-max [scores]
-  (let [max-score (apply max (map (fn [[position score]] score) scores))
-        max-position (find-position max-score scores)]
-    [max-position max-score]))
+(defn- find-max [is-max-player best-position valued-position index-of-move ]
+  (println "finding min")
+  (println "best position is " best-position)
+  (println "valued position is" valued-position)
 
-(defn- find-min [scores]
-  (let [min-score (apply min (map (fn [[position score]] score) scores))
-        min-position (find-position min-score scores)]
-    [min-position min-score]))
+  (if (< (second best-position) (second valued-position))
+    (vector index-of-move (second valued-position))
+    best-position))
 
-(defn minimax [board depth is-max-player max-player-symbol]
-  (let [scores [[]]]
+(defn- find-min [is-max-player best-position valued-position index-of-move]
+  (println "finding max")
+  (println "best position is " best-position)
+  (println "valued position is" valued-position)
 
-    (if (or (= depth 0)
-            (board/winning-line? board))
-      [DUMMY-POSITION (calculate-score board max-player-symbol depth)])
+  (if (> (second best-position) (second valued-position))
+    (vector index-of-move (second valued-position))
+    best-position))
+
+(defn- get-players-best-position [is-max-player best-position valued-position index-of-move]
+ (if is-max-player
+   (find-max is-max-player best-position valued-position index-of-move)
+   (find-min is-max-player best-position valued-position index-of-move)))
+
+(defn- game-over? [depth board]
+  (or (= depth 0)
+      (board/winning-line? board)))
+
+;(defn- calculate-best-score [[] board best-position depth is-max-player max-player-symbol]
+; (println "end case!")
+;  )
 
 
-    (for [next-move (board/indicies-of-free-spaces board)]
+(defn- calculate-best-score [[head & tail]  board best-position depth is-max-player max-player-symbol]
+  (println "calculating best score...")
 
-      (let [updated-board (board/place-mark board (marks/next-mark board) next-move)
-            [DUMMY-POSITION score]  (minimax
-                                      updated-board
-                                      (dec depth)
-                                      (not is-max-player)
-                                      max-player-symbol)
-            scores (conj scores [next-move (second score)])]))
+  (let [
+        ;[head & tail] (board/indicies-of-free-spaces board)
+        updated-board (board/place-mark board (marks/next-mark board) head)
+        position (minimax
+                    updated-board
+                    (dec depth)
+                    (not is-max-player)
+                    max-player-symbol)]
 
-    ; because everything is immutable, how do I add to the scores eacch time
-    ; cant pass it in the recursion as i need the return value fo the recursive loop
-    (println "scores are " scores)
-    (if is-max-player
-      (find-max scores)
-      (find-min scores)
-      )
+    (println "best position is " best-position)
+    (println "first free slot " head )
+    (println "position " position)
+    ;(get-players-best-position is-max-player best-position position head)
+    (if (not (= 0  (count tail)))
+      (calculate-best-score tail board (get-players-best-position is-max-player best-position position head) (count tail) is-max-player max-player-symbol)
+      (get-players-best-position is-max-player best-position position head))
     ))
 
-  (defn choose-move [board]
-    (let [is-max-player true
-          max-player-symbol (marks/next-mark board)
-          [best-position best-score]
-          (minimax
-            board
-            (count (board/indicies-of-free-spaces board))
-            is-max-player
-            max-player-symbol)]
-      best-position
-      )
-    )
+(defn minimax [board depth is-max-player max-player-symbol]
+  (let [initial-score (calculate-initial-score is-max-player)]
+    (println "initial score : " initial-score)
+
+    (if (game-over? depth board)
+      (calculate-game-over-score board max-player-symbol depth)
+      (calculate-best-score (board/indicies-of-free-spaces board) board initial-score depth is-max-player max-player-symbol))))
+
+(defn choose-move [board]
+  (let [is-max-player true
+        max-player-symbol (marks/next-mark board)
+        [best-position best-score] (minimax
+                                     board
+                                     (count (board/indicies-of-free-spaces board))
+                                     is-max-player
+                                     max-player-symbol)]
+
+    (println "best position is " best-position)
+    (println "best score is " best-score)
+
+    best-position))
