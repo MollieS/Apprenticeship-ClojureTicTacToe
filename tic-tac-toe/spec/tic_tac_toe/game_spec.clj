@@ -11,41 +11,41 @@
 (defn- empty-board[]
   (board/create-empty-board))
 
-
 (defn- populated-board []
   [X X O nil O X X O O] )
 
 (def fake-players
   {X (fn[board] 2)
-   O (fn[board] -1) }
-  )
+   O (fn[board] -1) })
 
 (describe "Tic Tac Toe"
           (with-stubs)
           (around [it]
                   (with-out-str (it)))
 
-          (it "game prompts for player option"
-              (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
-                            play-move (stub :play-move {:return "whole game is stubbed"})]
+          (it "game is setup for moves to be made"
+              (with-redefs [prompt/get-replay-option (stub :replay {:return "No replay"})
+                            get-players (stub :get-players {:return fake-players})
+                            board/create-empty-board (stub :create-new-board {:return (empty-board)})
+                            play-move (stub :play-move {:return "moves are made"})]
 
-                (start)
+                (play-game)
 
-                (should-have-invoked :valid-player-option {:times 1})))
-
-          (it "human vs human game begins with playing a move on an empty board"
-              (with-redefs [prompt/get-valid-player-option (stub :valid-player-option {:return 1})
-                            board/create-empty-board (stub :create {:return (empty-board)})
-                            play-move (stub :play-move {:return "whole game is stubbed"})]
-
-                (start)
-
-                (should-have-invoked :create {:times 1})
+                (should-have-invoked :create-new-board {:times 1})
+                (should-have-invoked :get-players {:times 1})
                 (should-have-invoked :play-move {:times 1})))
+
+          (it "game ends with goodbye message"
+              (with-redefs [play-game (stub :play-game {:return "game is played"})
+                            writer/goodbye-msg (stub :goodbye ) ]
+                (start)
+
+                (should-have-invoked :play-game {:times 1})
+                (should-have-invoked :goodbye {:times 1})))
 
           (it "players move updates the board"
               (should= [O nil X nil O X nil nil X]
-                       (play-single-move fake-players [O nil nil nil O X nil nil X] X)))
+                       (update-board-with-move fake-players [O nil nil nil O X nil nil X] X)))
 
           (it "displays board when game is won"
               (with-redefs [writer/display (stub :display {:return "Board is displayed"})]
@@ -58,34 +58,31 @@
                 (should-have-invoked :display {:times 1})))
 
           (it "checks for a win after each move"
-              (with-redefs[game-over? (stub :game-over?)
-                           board/winning-line? (stub :winning-line? {:return false})
-                           prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
-                ( with-in-str "3\n4\n9\n"
+              (with-redefs[board/winning-line? (stub :winning-line? {:return false})
+                           prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
+                (with-in-str "3\n4\n9\n"
                   (play-move [X O nil nil X O O X nil] players/human-human))
 
-                (should-have-invoked :winning-line? {:times 3})
-                (should-have-invoked :game-over? {:times 3})))
+                (should-have-invoked :winning-line? {:times 4})))
 
           (it "checks for a draw after each move until a win takes place"
-              (with-redefs [game-over? (stub :game-over?)
-                            board/free-spaces?(stub :free-spaces? {:return true})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
-                ( with-in-str "3\n4\n9\n"
+              (with-redefs [no-free-spaces? (stub :checks-for-draw {:return false})
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
+
+                (with-in-str "3\n4\n9\n"
                   (play-move [X O nil nil X O O X nil] players/human-human))
 
-                (should-have-invoked :free-spaces? {:times 2})
-                (should-have-invoked :game-over? {:times 3})))
+                (should-have-invoked :checks-for-draw {:times 2})))
 
           (it "announces win"
               (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 3})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 (should-contain "The game was won by X"
                                 (with-out-str (play-move [X O nil nil O nil X X O] players/human-human)))))
 
           (it "announces draw"
               (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 2})
-                            prompt/get-valid-replay-option (stub :valid-replay-option {:return "N"})]
+                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 (should-contain "The game was a draw"
                                 (with-out-str (play-move [X O nil O X X O X O] players/human-human)))))
 
@@ -96,12 +93,12 @@
                                   (play-move (empty-board) players/human-human)))))
 
           (it "game can be played mulitple times"
-              (with-redefs [announce-win (stub :announce-win {:return "Winner"})
-                            announce-draw (stub :announce-draw {:return "Draw"})]
+              (with-redefs [play-move (stub :play-move)
+                            empty-board (stub :initial-board {:return populated-board})
+                            get-players (stub :players {:return players/human-human})]
 
-                (with-in-str "4\nY\n1\n1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
+                (with-in-str "Y\nN\n"
                   (with-out-str
-                    (play-move (populated-board) players/human-human))))
-
-              (should-have-invoked :announce-draw {:times 1})
-              (should-have-invoked :announce-win {:times 1})))
+                    (play-game))))
+              (should-have-invoked :play-move {:times 2})
+              ))
