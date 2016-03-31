@@ -15,8 +15,7 @@
               (should= [-1 -14] (calculate-game-over-score [O X nil O X nil O nil nil] X 4)))
 
           (it "scores 0 for a draw"
-              (should= [-1 0] (calculate-game-over-score draw-board X 0))
-              )
+              (should= [-1 0] (calculate-game-over-score draw-board X 0)))
 
           (it "calculates score when there are no spaces left on the board"
               (should-invoke calculate-game-over-score {:times 1}
@@ -89,4 +88,9 @@
           (it "blocks opponent in second diagonal"
               (should= 4
                        (choose-move [nil nil O nil nil X O nil X])))
+
+      ;   (it "blocks fork"
+      ;      (should= 4
+      ;               (choose-move [X nil nil nil nil nil nil nil nil]))
+      ;       )
           )

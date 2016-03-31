@@ -18,7 +18,6 @@
     [DUMMY-POSITION INITIAL-MIN-SCORE]))
 
 (defn- max-player-winning-score [depth]
-  (println "max player score is" (+ MAX-SCORE depth))
   (+ MAX-SCORE depth))
 
 (defn- min-player-winning-score [depth]
@@ -67,11 +66,6 @@
   (or (= depth 0)
       (board/winning-line? board)))
 
-;(defn- calculate-best-score [[] board best-position depth is-max-player max-player-symbol]
-; (println "end case!")
-;  )
-
-
 (defn- calculate-best-score [[head & tail]  board best-position depth is-max-player max-player-symbol]
   (println "calculating best score...")
 
@@ -88,9 +82,11 @@
     (println "first free slot " head )
     (println "position " position)
     ;(get-players-best-position is-max-player best-position position head)
+
+   (let [latest-best-score (get-players-best-position is-max-player best-position position head)]
     (if (not (= 0  (count tail)))
-      (calculate-best-score tail board (get-players-best-position is-max-player best-position position head) (count tail) is-max-player max-player-symbol)
-      (get-players-best-position is-max-player best-position position head))
+      (calculate-best-score tail board latest-best-score (count tail) is-max-player max-player-symbol)
+      latest-best-score))
     ))
 
 (defn minimax [board depth is-max-player max-player-symbol]
