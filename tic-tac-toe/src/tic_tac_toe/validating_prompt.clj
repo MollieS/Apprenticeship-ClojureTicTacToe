@@ -53,12 +53,13 @@
       #(show-board-with-invalid-message writer/invalid-space-message board))))
 
 (defn- validate-input-with-reprompt [prompt-user valid-conditions format-input]
-  (prompt-user)
+  (loop []
+    (prompt-user)
 
-  (let [input (reader/read-input)]
-    (if (valid-conditions input)
-      (format-input input)
-      (validate-input-with-reprompt prompt-user valid-conditions format-input))))
+    (let [input (reader/read-input)]
+      (if (valid-conditions input)
+        (format-input input)
+        (recur)))))
 
 (defn get-valid-player-option[]
   (validate-input-with-reprompt
@@ -69,7 +70,7 @@
 (defn get-valid-next-move[board]
   (validate-input-with-reprompt
     writer/prompt-for-next-move
-    #(validation-criteria-for-next-move board %)
+    (partial validation-criteria-for-next-move board)
     zero-based-number))
 
 (defn get-replay-option []
