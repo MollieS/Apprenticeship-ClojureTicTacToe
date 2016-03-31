@@ -89,8 +89,8 @@
               (should= 4
                        (choose-move [nil nil O nil nil X O nil X])))
 
-      ;   (it "blocks fork"
-      ;      (should= 4
-      ;               (choose-move [X nil nil nil nil nil nil nil nil]))
-      ;       )
+         (it "takes middle slot when top left is occupied"
+          (should= 4
+                   (choose-move [X nil nil nil nil nil nil nil nil]))
+             )
           )
