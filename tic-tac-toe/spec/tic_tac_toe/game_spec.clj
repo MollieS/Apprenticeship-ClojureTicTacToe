@@ -5,7 +5,6 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
-            [tic-tac-toe.human-player :as human-player]
             [tic-tac-toe.players :as players]))
 
 (defn- empty-board[]
