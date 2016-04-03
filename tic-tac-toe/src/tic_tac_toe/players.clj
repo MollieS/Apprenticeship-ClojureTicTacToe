@@ -3,36 +3,18 @@
             [tic-tac-toe.human-player :as human-player]
             [tic-tac-toe.minimax-player :as minimax-player]
             [tic-tac-toe.random-player :as random-player]
-            [tic-tac-toe.player-options :as player-options]
-            ))
+            [tic-tac-toe.player-options :as player-options]))
 
-
-(def human-human
-  { X human-player/choose-move
-    O human-player/choose-move })
-
-(def random-human
-  { X random-player/choose-move
-    O human-player/choose-move })
-
-(def human-random
-  { X human-player/choose-move
-    O random-player/choose-move })
-
-(def human-unbeatable
-  { X human-player/choose-move
-    O minimax-player/choose-move })
-
-(def unbeatable-human
-  { X minimax-player/choose-move
-    O human-player/choose-move })
+(defn- setup-players [first-player second-player]
+ { X first-player
+   O second-player})
 
 (defn configure-players [game-option]
   (cond
-    (= game-option player-options/human-human-id) human-human
-    (= game-option player-options/random-human-id) random-human
-    (= game-option player-options/human-random-id) human-random
-    (= game-option player-options/human-unbeatable-id) human-unbeatable
-    (= game-option player-options/unbeatable-human-id) unbeatable-human
+    (= game-option player-options/human-human-id) (setup-players human-player/choose-move human-player/choose-move)
+    (= game-option player-options/random-human-id) (setup-players random-player/choose-move human-player/choose-move)
+    (= game-option player-options/human-random-id) (setup-players human-player/choose-move random-player/choose-move)
+    (= game-option player-options/unbeatable-human-id) (setup-players minimax-player/choose-move human-player/choose-move)
+    (= game-option player-options/human-unbeatable-id) (setup-players human-player/choose-move minimax-player/choose-move)
     )
   )

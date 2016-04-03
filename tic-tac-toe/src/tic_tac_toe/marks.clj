@@ -10,11 +10,4 @@
   (if (> (count-symbol X board)
          (count-symbol O board))
     O
-    X)
-  )
-
-(defn opponent [player-symbol]
- (if (= player-symbol X)
-   O
-   X)
-  )
+    X))

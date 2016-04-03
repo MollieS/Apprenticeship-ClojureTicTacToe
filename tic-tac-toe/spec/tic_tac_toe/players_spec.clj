@@ -31,16 +31,17 @@
                 (should= random-player/choose-move
                          (get human-random O))))
 
-         (it "finds player configuration for human vs unbeatable"
-            (let [human-unbeatable (configure-players 4)]
-             (should= human-player/choose-move
-                      (get human-unbeatable X))
-              (should= minimax-player/choose-move
-                       (get human-unbeatable O))))
-
           (it "finds player configuration for unbeatable vs human"
-              (let [unbeatable-human (configure-players 5)]
+              (let [unbeatable-human (configure-players 4)]
                 (should= minimax-player/choose-move
                          (get unbeatable-human X))
-                         (should= human-player/choose-move
-                                  (get unbeatable-human O)))))
+                (should= human-player/choose-move
+                         (get unbeatable-human O))))
+
+          (it "finds player configuration for human vs unbeatable"
+              (let [human-unbeatable (configure-players 5)]
+                (should= human-player/choose-move
+                         (get human-unbeatable X))
+                (should= minimax-player/choose-move
+                         (get human-unbeatable O)))))
+

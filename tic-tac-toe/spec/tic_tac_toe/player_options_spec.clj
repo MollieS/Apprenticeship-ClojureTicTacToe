@@ -9,7 +9,7 @@
                        (count player-options)))
 
           (it "has display format"
-              (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n (4) Human vs Unbeatable\n (5) Unbeatable vs Human\n "
+              (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n (4) Unbeatable vs Human\n (5) Human vs Unbeatable\n "
                        (display)))
 
           (it "valid choices"
@@ -26,8 +26,10 @@
           (it "has an id for human vs random"
               (should= 3 human-random-id))
 
-          (it "has an id for human vs unbeatable"
-              (should= 4 human-unbeatable-id))
-
          (it "has an id for unbeatable vs human"
-             (should= 5 unbeatable-human-id)))
+             (should= 4 unbeatable-human-id))
+
+          (it "has an id for human vs unbeatable"
+              (should= 5 human-unbeatable-id))
+
+          )
