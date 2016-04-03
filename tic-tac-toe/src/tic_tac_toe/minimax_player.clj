@@ -58,40 +58,36 @@
     best-position))
 
 (defn- get-players-best-position [is-max-player best-position valued-position index-of-move]
- (if is-max-player
-   (find-max is-max-player best-position valued-position index-of-move)
-   (find-min is-max-player best-position valued-position index-of-move)))
+  (if is-max-player
+    (find-max is-max-player best-position valued-position index-of-move)
+    (find-min is-max-player best-position valued-position index-of-move)))
 
 (defn- game-over? [depth board]
   (or (= depth 0)
       (board/winning-line? board)))
 
-(defn- calculate-best-score [[head & tail]  board best-position depth is-max-player max-player-symbol]
-  (println "calculating best score...")
-  (println "max symbol is " max-player-symbol)
+(defn- calculate-best-score [free-slots  board best-position depth is-max-player max-player-symbol]
+  (loop [[head & tail] free-slots
+    board board
+    best-position best-position
+    depth depth
+    is-max-player is-max-player]
 
-  (let [
-        ;[head & tail] (board/indicies-of-free-spaces board)
-        updated-board (board/place-mark board (marks/next-mark board) head)
+  (let [ updated-board (board/place-mark board (marks/next-mark board) head)
         position (minimax
-                    updated-board
-                    (dec depth)
-                    (not is-max-player)
-                    max-player-symbol)]
+                   updated-board
+                   (dec depth)
+                   (not is-max-player)
+                   max-player-symbol)]
 
-    (println "best position is " best-position)
-    (println "first free slot " head )
-    (println "position " position)
-    ;(get-players-best-position is-max-player best-position position head)
-
-   (let [latest-best-score (get-players-best-position is-max-player best-position position head)]
-    (if (not (= 0  (count tail)))
-      (calculate-best-score tail board latest-best-score
-                           depth
-                           ; (count tail)
-                            is-max-player max-player-symbol)
-      latest-best-score))
-    ))
+    (let [latest-best-score (get-players-best-position is-max-player best-position position head)]
+      (if (= 0  (count tail))
+        latest-best-score
+        (recur tail board latest-best-score
+                              depth
+                              is-max-player )
+        ))
+    )))
 
 (defn minimax [board depth is-max-player max-player-symbol]
   (let [initial-score (calculate-initial-score is-max-player)]
