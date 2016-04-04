@@ -7,8 +7,7 @@
   (count (filter #{mark} board)))
 
 (defn next-mark [board]
-  (if (= (count-symbol X board)
+  (if (> (count-symbol X board)
          (count-symbol O board))
-    X
-    O)
-  )
+    O
+    X))

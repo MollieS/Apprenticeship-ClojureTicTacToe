@@ -5,8 +5,8 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.validating-prompt :as prompt]
             [tic-tac-toe.writer :as writer]
-            [tic-tac-toe.human-player :as human-player]
-            [tic-tac-toe.players :as players]))
+            [tic-tac-toe.players :as players]
+            [tic-tac-toe.player-options :as player-options] ))
 
 (defn- empty-board[]
   (board/create-empty-board))
@@ -61,44 +61,50 @@
               (with-redefs[board/winning-line? (stub :winning-line? {:return false})
                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
                 (with-in-str "3\n4\n9\n"
-                  (play-move [X O nil nil X O O X nil] players/human-human))
+                  (play-move [X O nil nil X O O X nil]
+                             (players/configure-players player-options/human-human-id ))
 
-                (should-have-invoked :winning-line? {:times 4})))
+                  (should-have-invoked :winning-line? {:times 4})))
 
-          (it "checks for a draw after each move until a win takes place"
-              (with-redefs [no-free-spaces? (stub :checks-for-draw {:return false})
-                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
+              (it "checks for a draw after each move until a win takes place"
+                  (with-redefs [no-free-spaces? (stub :checks-for-draw {:return false})
+                                prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
 
-                (with-in-str "3\n4\n9\n"
-                  (play-move [X O nil nil X O O X nil] players/human-human))
+                    (with-in-str "3\n4\n9\n"
+                      (play-move [X O nil nil X O O X nil]
+                                 (players/configure-players player-options/human-human-id)))
 
-                (should-have-invoked :checks-for-draw {:times 2})))
+                    (should-have-invoked :checks-for-draw {:times 2})))
 
-          (it "announces win"
-              (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 3})
-                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
-                (should-contain "The game was won by X"
-                                (with-out-str (play-move [X O nil nil O nil X X O] players/human-human)))))
+              (it "announces win"
+                  (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 3})
+                                prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
+                    (should-contain "The game was won by X"
+                                    (with-out-str (play-move [X O nil nil O nil X X O]
+                                                             (players/configure-players player-options/human-human-id))))))
 
-          (it "announces draw"
-              (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 2})
-                            prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
-                (should-contain "The game was a draw"
-                                (with-out-str (play-move [X O nil O X X O X O] players/human-human)))))
+              (it "announces draw"
+                  (with-redefs [prompt/get-valid-next-move (stub :next-move {:return 2})
+                                prompt/get-replay-option (stub :valid-replay-option {:return "N"})]
+                    (should-contain "The game was a draw"
+                                    (with-out-str (play-move [X O nil O X X O X O]
+                                                             (players/configure-players player-options/human-human-id) )))))
 
-          (it "has players take turns until board is full"
-              (should-contain "The game was a draw"
-                              (with-in-str "1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
-                                (with-out-str
-                                  (play-move (empty-board) players/human-human)))))
+              (it "has players take turns until board is full"
+                  (should-contain "The game was a draw"
+                                  (with-in-str "1\n2\n3\n4\n5\n7\n6\n9\n8\nN\n"
+                                    (with-out-str
+                                      (play-move (empty-board)
+                                                 (players/configure-players player-options/human-human-id))))))
 
-          (it "game can be played mulitple times"
-              (with-redefs [play-move (stub :play-move)
-                            empty-board (stub :initial-board {:return populated-board})
-                            get-players (stub :players {:return players/human-human})]
+              (it "game can be played mulitple times"
+                  (with-redefs [play-move (stub :play-move)
+                                empty-board (stub :initial-board {:return populated-board})
+                                get-players (stub :players {:return
+                                                            (players/configure-players player-options/human-human-id)
+                                                            })]
 
-                (with-in-str "Y\nN\n"
-                  (with-out-str
-                    (play-game))))
-              (should-have-invoked :play-move {:times 2})
-              ))
+                    (with-in-str "Y\nN\n"
+                      (with-out-str
+                        (play-game))))
+                  (should-have-invoked :play-move {:times 2}))))
