@@ -68,13 +68,17 @@
 (defn- prune? [alpha beta]
   (>= alpha beta))
 
+(defn- stop-exploration-of-branches? [remaining-spaces alpha beta]
+  (or
+    (prune? alpha beta)
+    (no-free-spaces remaining-spaces)))
+
 (defn minimax [board depth is-max-player max-player-symbol alpha beta]
   (let [initial-score (calculate-initial-score is-max-player)]
 
     (if (game-over? depth board)
       (calculate-game-over-score board max-player-symbol depth)
       (do
-
         (loop [[first-free-slot & rest] (board/indicies-of-free-spaces board)
                best-position initial-score
                alpha alpha
@@ -92,10 +96,8 @@
             (let [latest-best-score (get-players-best-position is-max-player best-position position first-free-slot)
                   new-alpha (recalculate-alpha is-max-player latest-best-score alpha)
                   new-beta (recalculate-beta is-max-player latest-best-score beta)]
-              (cond
-                (prune? new-alpha new-beta) latest-best-score
-                (no-free-spaces rest) latest-best-score
-                :else
+              (if (stop-exploration-of-branches? rest new-alpha new-beta)
+                latest-best-score
                 (recur rest latest-best-score new-alpha new-beta)))))))))
 
 (defn choose-move [board]
