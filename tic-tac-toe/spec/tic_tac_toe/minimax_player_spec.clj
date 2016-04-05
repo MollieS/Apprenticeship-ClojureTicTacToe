@@ -86,6 +86,7 @@
               (let  [starting-time (t/now)]
                 (choose-move (board/create-empty-board))
                 (let [finish-time (t/now)
-                      time-taken (t/in-seconds (t/interval starting-time finish-time))]
-                (should= true
-                          (< time-taken 1 ) )))) )
+                      time-taken (t/in-millis (t/interval starting-time finish-time))]
+                  (println "time taken " time-taken)
+                  (should= true
+                           (< time-taken 1000 ) )))) )

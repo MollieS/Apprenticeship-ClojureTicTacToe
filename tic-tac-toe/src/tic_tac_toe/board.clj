@@ -63,9 +63,7 @@
   (cond
     (memoized-winning-row? (get-rows board)) (memoized-find-winning-symbol (get-rows board))
     (memoized-winning-row? (get-columns board)) (memoized-find-winning-symbol (get-columns board))
-    (memoized-winning-row? (get-diagonals board)) (memoized-find-winning-symbol (get-diagonals board))
-    )
-  )
+    (memoized-winning-row? (get-diagonals board)) (memoized-find-winning-symbol (get-diagonals board))))
 
 (def winning-symbol (memoize cached-winning-symbol))
 
