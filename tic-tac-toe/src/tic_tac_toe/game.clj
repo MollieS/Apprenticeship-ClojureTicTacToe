@@ -32,9 +32,9 @@
       (no-free-spaces? updated-board)))
 
 (defn- announce-result [board]
- (if (has-win? board)
-   (announce-win board)
-   (announce-draw board)))
+  (if (has-win? board)
+    (announce-win board)
+    (announce-draw board)))
 
 (defn- mark-of-next-player [board]
   (marks/next-mark board))
@@ -53,18 +53,18 @@
         (recur updated-board)))))
 
 (defn replay? []
-    (= (prompt/get-replay-option) replay/replay-option))
+  (= (prompt/get-replay-option) replay/replay-option))
 
 (defn get-players []
   (players/configure-players (player-choice)))
 
 (defn play-game []
-  (let [board (empty-board)
-        player-choice (get-players)]
-    (play-move board player-choice))
-
-  (if (replay?)
-    (play-game)))
+  (loop [ ]
+    (let [board (empty-board)
+          player-choice (get-players)]
+      (play-move board player-choice))
+    (if (replay?)
+      (recur))))
 
 (defn start[]
   (play-game)
