@@ -3,8 +3,6 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.marks :as marks]))
 
-(declare minimax)
-
 (def draw-score 0)
 (def max-score 10)
 (def min-score -10)
@@ -28,7 +26,7 @@
     (max-player-winning-score depth)
     (min-player-winning-score depth)))
 
-(defn calculate-game-over-score [board max-player-symbol depth]
+(defn- calculate-game-over-score [board max-player-symbol depth]
   (if (board/winning-line? board)
     [position-placeholder (get-winning-score max-player-symbol board depth)]
     [position-placeholder draw-score]))
@@ -55,28 +53,27 @@
 (defn- no-free-spaces [remaining-spaces]
   (= 0 (count remaining-spaces)))
 
-(defn- calculate-best-score [free-slots board best-position depth is-max-player max-player-symbol]
-  (loop [[first-free-slot & rest] free-slots
-         best-position best-position]
-
-    (let [updated-board (board/place-mark board (marks/next-mark board) first-free-slot)
-          position (minimax
-                     updated-board
-                     (dec depth)
-                     (not is-max-player)
-                     max-player-symbol)]
-
-      (let [latest-best-score (get-players-best-position is-max-player best-position position first-free-slot)]
-        (if (no-free-spaces rest)
-          latest-best-score
-          (recur rest latest-best-score))))))
-
 (defn minimax [board depth is-max-player max-player-symbol]
   (let [initial-score (calculate-initial-score is-max-player)]
 
     (if (game-over? depth board)
       (calculate-game-over-score board max-player-symbol depth)
-      (calculate-best-score (board/indicies-of-free-spaces board) board initial-score depth is-max-player max-player-symbol))))
+      (do
+
+        (loop [[first-free-slot & rest] (board/indicies-of-free-spaces board)
+               best-position initial-score]
+
+          (let [updated-board (board/place-mark board (marks/next-mark board) first-free-slot)
+                position (minimax
+                           updated-board
+                           (dec depth)
+                           (not is-max-player)
+                           max-player-symbol)]
+
+            (let [latest-best-score (get-players-best-position is-max-player best-position position first-free-slot)]
+              (if (no-free-spaces rest)
+                latest-best-score
+                (recur rest latest-best-score)))))))))
 
 (defn choose-move [board]
   (let [is-max-player true
