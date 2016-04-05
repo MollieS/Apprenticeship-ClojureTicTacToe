@@ -97,7 +97,7 @@
                                       (play-move (empty-board)
                                                  (players/configure-players player-options/human-human-id))))))
 
-              (it "game can be played mulitple times"
+              (it "game can be played multiple times"
                   (with-redefs [play-move (stub :play-move)
                                 empty-board (stub :initial-board {:return populated-board})
                                 get-players (stub :players {:return
