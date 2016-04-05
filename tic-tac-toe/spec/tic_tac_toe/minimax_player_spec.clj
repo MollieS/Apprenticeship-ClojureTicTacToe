@@ -78,5 +78,4 @@
 
          (it "should not allow a fork to form"
             (should= 1
-             (choose-move [X nil nil nil O nil nil nil X])))
-          )
+                     (choose-move [X nil nil nil O nil nil nil X]))))

@@ -47,7 +47,6 @@
   (loop [board board]
     (let [next-mark (mark-of-next-player board)
           updated-board (update-board-with-move players board next-mark)]
-
       (if (game-over? updated-board)
         (announce-result updated-board)
         (recur updated-board)))))
