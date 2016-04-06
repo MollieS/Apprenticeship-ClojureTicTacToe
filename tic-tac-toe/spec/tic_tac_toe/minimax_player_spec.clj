@@ -3,10 +3,13 @@
             [tic-tac-toe.minimax-player :refer :all]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.board :as board]
-            [clj-time.core :as t]))
+            [clj-time.core :as date-time]))
 
 (def win-board [X O nil X O nil X nil nil])
 (def draw-board [O X O X O O X O X])
+
+(defn- time-taken [starting-time finish-time]
+  (date-time/in-millis (date-time/interval starting-time finish-time)))
 
 (describe "Minimax Player"
 
@@ -83,10 +86,8 @@
                      (choose-move [X nil nil nil O nil nil nil X])))
 
           (it "takes first move in under one second"
-              (let  [starting-time (t/now)]
+              (let [starting-time (date-time/now)]
                 (choose-move (board/create-empty-board))
-                (let [finish-time (t/now)
-                      time-taken (t/in-millis (t/interval starting-time finish-time))]
-                  (println "time taken " time-taken)
+                (let [finish-time (date-time/now)]
                   (should= true
-                           (< time-taken 1000 ) )))) )
+                           (< (time-taken starting-time finish-time) 1000 ) )))))
