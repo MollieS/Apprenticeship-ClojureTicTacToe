@@ -24,6 +24,9 @@
     (map (fn[[cell-one cell-two cell-three]]
            (str "\n [ " cell-one " ] [ " cell-two " ] [ " cell-three " ]")) board)))
 
+(defn- clear []
+   (println "\033[2J\033[;H"))
+
 (defn prompt-for-next-move []
   (println "Please enter your next move"))
 
@@ -40,16 +43,18 @@
   (println "The game was won by" player-symbol))
 
 (defn display [board]
+  (clear)
   (apply println (border (board/get-rows (vec (board-with-one-based-indicies board))))))
 
  (defn prompt-for-player-option []
+   (clear)
    (println "Choose player option:\n" (player-options/display)))
 
 (defn invalid-player-option-message[]
   (println "Not a valid player option!"))
 
 (defn prompt-for-replay []
-     (println (str "Play again? (" replay-option/replay-option " to replay)")))
+  (println (str "Play again? (" replay-option/replay-option " to replay)")))
 
 (defn goodbye-msg []
   (println "Thanks for playing. Goodbye!"))
