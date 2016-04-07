@@ -6,13 +6,17 @@
   (let [[one two three] row]
     (and (= one two three) (not(= one nil)))))
 
-(defn- winning-row? [rows]
+(defn- has-winning-row? [rows]
   (some true? (map three-matching-player-symbols? rows)))
 
-(defn- find-winning-symbol [rows]
+(def winning-row? (memoize has-winning-row?))
+
+(defn- get-winning-symbol [rows]
   (first
     (remove nil?
             (map (fn[row] (if (three-matching-player-symbols? row) (first row) nil)) rows))))
+
+(def find-winning-symbol (memoize get-winning-symbol))
 
 (defn create-empty-board []
   (vec (repeat 9 nil)))
@@ -47,21 +51,21 @@
    ]
   )
 
-(defn winning-line? [board]
+(defn has-winning-line? [board]
   (boolean (or
              (winning-row? (get-rows board))
              (winning-row? (get-columns board))
-             (winning-row? (get-diagonals board))
-             ))
-  )
+             (winning-row? (get-diagonals board)))))
 
-(defn winning-symbol [board]
+(def winning-line? (memoize has-winning-line?))
+
+(defn get-winning-symbol [board]
   (cond
     (winning-row? (get-rows board)) (find-winning-symbol (get-rows board))
     (winning-row? (get-columns board)) (find-winning-symbol (get-columns board))
-    (winning-row? (get-diagonals board)) (find-winning-symbol (get-diagonals board))
-    )
-  )
+    (winning-row? (get-diagonals board)) (find-winning-symbol (get-diagonals board))))
+
+(def winning-symbol (memoize get-winning-symbol))
 
 (defn free-spaces? [board]
   (boolean (some nil? board)))

@@ -9,6 +9,8 @@
 (def initial-max-score -100)
 (def initial-min-score 100)
 (def position-placeholder -1)
+(def initial-alpha -100)
+(def initial-beta 100)
 
 (defn- calculate-initial-score [is-max-player]
   (if is-max-player
@@ -53,27 +55,50 @@
 (defn- no-free-spaces [remaining-spaces]
   (= 0 (count remaining-spaces)))
 
-(defn minimax [board depth is-max-player max-player-symbol]
+(defn- recalculate-alpha [is-max-player best-score alpha]
+  (if is-max-player
+    (max (second best-score) alpha)
+    alpha))
+
+(defn- recalculate-beta [is-max-player best-score beta]
+  (if is-max-player
+    beta
+    (min (second best-score) beta)))
+
+(defn- prune? [alpha beta]
+  (>= alpha beta))
+
+(defn- stop-exploration-of-branches? [remaining-spaces alpha beta]
+  (or
+    (prune? alpha beta)
+    (no-free-spaces remaining-spaces)))
+
+(defn minimax [board depth is-max-player max-player-symbol alpha beta]
   (let [initial-score (calculate-initial-score is-max-player)]
 
     (if (game-over? depth board)
       (calculate-game-over-score board max-player-symbol depth)
       (do
-
         (loop [[first-free-slot & rest] (board/indicies-of-free-spaces board)
-               best-position initial-score]
+               best-position initial-score
+               alpha alpha
+               beta beta]
 
           (let [updated-board (board/place-mark board (marks/next-mark board) first-free-slot)
                 position (minimax
                            updated-board
                            (dec depth)
                            (not is-max-player)
-                           max-player-symbol)]
+                           max-player-symbol
+                           alpha
+                           beta)]
 
-            (let [latest-best-score (get-players-best-position is-max-player best-position position first-free-slot)]
-              (if (no-free-spaces rest)
+            (let [latest-best-score (get-players-best-position is-max-player best-position position first-free-slot)
+                  new-alpha (recalculate-alpha is-max-player latest-best-score alpha)
+                  new-beta (recalculate-beta is-max-player latest-best-score beta)]
+              (if (stop-exploration-of-branches? rest new-alpha new-beta)
                 latest-best-score
-                (recur rest latest-best-score)))))))))
+                (recur rest latest-best-score new-alpha new-beta)))))))))
 
 (defn choose-move [board]
   (let [is-max-player true
@@ -82,5 +107,7 @@
                                      board
                                      (count (board/indicies-of-free-spaces board))
                                      is-max-player
-                                     max-player-symbol)]
+                                     max-player-symbol
+                                     initial-alpha
+                                     initial-beta)]
     best-position))

@@ -1,10 +1,15 @@
 (ns tic-tac-toe.minimax-player-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.minimax-player :refer :all]
-            [tic-tac-toe.marks :refer :all]))
+            [tic-tac-toe.marks :refer :all]
+            [tic-tac-toe.board :as board]
+            [clj-time.core :as date-time]))
 
 (def win-board [X O nil X O nil X nil nil])
 (def draw-board [O X O X O O X O X])
+
+(defn- time-taken [starting-time finish-time]
+  (date-time/in-millis (date-time/interval starting-time finish-time)))
 
 (describe "Minimax Player"
 
@@ -50,7 +55,7 @@
 
           (it "blocks opponent on bottom row"
               (should= 7
-              (choose-move [nil nil X nil X nil O nil O])))
+                       (choose-move [nil nil X nil X nil O nil O])))
 
           (it "blocks opponent on left column"
               (should= 3
@@ -76,6 +81,13 @@
           (should= 4
                    (choose-move [X nil nil nil nil nil nil nil nil])))
 
-         (it "should not allow a fork to form"
+         (it "does not allow a fork to form"
             (should= 1
-                     (choose-move [X nil nil nil O nil nil nil X]))))
+                     (choose-move [X nil nil nil O nil nil nil X])))
+
+          (it "takes first move in under one second"
+              (let [starting-time (date-time/now)]
+                (choose-move (board/create-empty-board))
+                (let [finish-time (date-time/now)]
+                  (should= true
+                           (< (time-taken starting-time finish-time) 1000 ) )))))
