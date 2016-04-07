@@ -2,11 +2,7 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.random-player :refer :all]
             [tic-tac-toe.marks :refer :all]
-            [tic-tac-toe.board :as board]
-            [tic-tac-toe.delayed-player :as delayed-player]))
-
-(defn prove-execution[msg]
-  (print "Has executed from" msg))
+            [tic-tac-toe.board :as board]))
 
 (describe "Random Player"
           (it "Chooses the only free space on the board"

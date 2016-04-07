@@ -45,15 +45,29 @@
                 (should= minimax-player/choose-move
                          (get human-unbeatable O))))
 
+          (it "finds player configuration for random vs unbeatable"
+              (let [random-unbeatable (configure-players 6)]
+                (should= random-player/delayed-random-move
+                         (get random-unbeatable X))
+                (should= minimax-player/delayed-unbeatable-move
+                         (get random-unbeatable O))))
+
+          (it "finds player configuration for unbeatable vs random"
+              (let [unbeatable-random (configure-players 7)]
+                (should= minimax-player/delayed-unbeatable-move
+                         (get unbeatable-random X))
+                (should= random-player/delayed-random-move
+                         (get unbeatable-random O))))
+
           (it "finds player configuration for random vs random"
-              (let [random-random (configure-players 6)]
+              (let [random-random (configure-players 8)]
                 (should= random-player/delayed-random-move
                          (get random-random X))
                 (should= random-player/delayed-random-move
                          (get random-random O))))
 
          (it "finds player configuration for unbeatable vs unbeatable"
-              (let [unbeatable-unbeatable (configure-players 7)]
+              (let [unbeatable-unbeatable (configure-players 9)]
                 (should= minimax-player/delayed-unbeatable-move
                          (get unbeatable-unbeatable X))
                 (should= minimax-player/delayed-unbeatable-move
