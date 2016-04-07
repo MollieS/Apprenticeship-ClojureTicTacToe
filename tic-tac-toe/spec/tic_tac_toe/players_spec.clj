@@ -43,5 +43,11 @@
                 (should= human-player/choose-move
                          (get human-unbeatable X))
                 (should= minimax-player/choose-move
-                         (get human-unbeatable O)))))
+                         (get human-unbeatable O))))
 
+          (it "finds player configuration for random vs random"
+              (let [random-random (configure-players 6)]
+                (should= random-player/delayed-random-move
+                         (get random-random X))
+                (should= random-player/delayed-random-move
+                         (get random-random O)))))
