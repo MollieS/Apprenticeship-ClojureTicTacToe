@@ -6,6 +6,7 @@
 (def unbeatable-human-id 4)
 (def human-unbeatable-id 5)
 (def random-random-id 6)
+(def unbeatable-unbeatable-id 7)
 
 (def player-options
   { human-human-id "Human vs Human"
@@ -14,6 +15,7 @@
     unbeatable-human-id "Unbeatable vs Human"
     human-unbeatable-id "Human vs Unbeatable"
     random-random-id "Random vs Random"
+    unbeatable-unbeatable-id "Unbeatable vs Unbeatable"
    })
 
 (defn display[]

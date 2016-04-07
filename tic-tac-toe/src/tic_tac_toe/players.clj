@@ -17,4 +17,4 @@
     (= game-option player-options/unbeatable-human-id) (setup-players minimax-player/choose-move human-player/choose-move)
     (= game-option player-options/human-unbeatable-id) (setup-players human-player/choose-move minimax-player/choose-move)
     (= game-option player-options/random-random-id) (setup-players random-player/delayed-random-move random-player/delayed-random-move )
-    ))
+    (= game-option player-options/unbeatable-unbeatable-id) (setup-players minimax-player/delayed-unbeatable-move minimax-player/delayed-unbeatable-move)))

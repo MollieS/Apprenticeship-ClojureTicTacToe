@@ -5,15 +5,15 @@
 (describe "Player Options"
 
           (it "has 5 categories"
-              (should= 6
+              (should= 7
                        (count player-options)))
 
           (it "has display format"
-              (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n (4) Unbeatable vs Human\n (5) Human vs Unbeatable\n (6) Random vs Random\n "
+              (should= "(1) Human vs Human\n (2) Random vs Human\n (3) Human vs Random\n (4) Unbeatable vs Human\n (5) Human vs Unbeatable\n (6) Random vs Random\n (7) Unbeatable vs Unbeatable\n "
                        (display)))
 
           (it "valid choices"
-              (should= '(1 2 3 4 5 6)
+              (should= '(1 2 3 4 5 6 7)
                        (valid-player-options)))
 
           (it "has an id for human vs human"

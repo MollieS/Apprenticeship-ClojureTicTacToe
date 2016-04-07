@@ -50,4 +50,11 @@
                 (should= random-player/delayed-random-move
                          (get random-random X))
                 (should= random-player/delayed-random-move
-                         (get random-random O)))))
+                         (get random-random O))))
+
+         (it "finds player configuration for unbeatable vs unbeatable"
+              (let [unbeatable-unbeatable (configure-players 7)]
+                (should= minimax-player/delayed-unbeatable-move
+                         (get unbeatable-unbeatable X))
+                (should= minimax-player/delayed-unbeatable-move
+                         (get unbeatable-unbeatable O)))))
