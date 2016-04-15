@@ -13,9 +13,4 @@
 
           (it "provides valid move through commandline prompt"
               (should-invoke prompt/get-valid-next-move {:times 1}
-                             (choose-move (empty-board))))
-
-          (it "displays the board when user enters move"
-              (should-invoke writer/display {:times 1}
-                             (with-in-str "2\n"
-                               (choose-move (empty-board))))))
+                             (choose-move (empty-board)))))

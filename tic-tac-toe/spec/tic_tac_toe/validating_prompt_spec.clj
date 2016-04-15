@@ -63,7 +63,7 @@
               (should-invoke writer/invalid-player-option-message {:times 1}
                              (should-invoke writer/prompt-for-player-option {:times 2}
                                             (should= 1
-                                                     (with-in-str "6\n1\n"
+                                                     (with-in-str "66\n1\n"
                                                        (get-valid-player-option))))))
 
          (it "prompts and reads in replay option"

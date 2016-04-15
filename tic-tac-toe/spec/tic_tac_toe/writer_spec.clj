@@ -4,6 +4,8 @@
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.player-options :as player-options]))
 
+(def clear "\033[2J\033[;H\n")
+
 (describe "Command Line Writer"
           (around [it]
                   (with-out-str (it)))
@@ -29,16 +31,16 @@
                        (with-out-str(win-message "X"))))
 
           (it "displays empty board"
-              (should= "\n [ 1 ] [ 2 ] [ 3 ] \n [ 4 ] [ 5 ] [ 6 ] \n [ 7 ] [ 8 ] [ 9 ]\n"
-                       (with-out-str (display (vec (repeat 9 nil))))))
+              (should= (str clear "\n [ 1 ] [ 2 ] [ 3 ] \n [ 4 ] [ 5 ] [ 6 ] \n [ 7 ] [ 8 ] [ 9 ]\n"
+)                       (with-out-str (display (vec (repeat 9 nil))))))
 
           (it "displays board with occupied cells"
-              (should= "\n [ X ] [ 2 ] [ O ] \n [ 4 ] [ 5 ] [ X ] \n [ 7 ] [ 8 ] [ 9 ]\n"
+              (should= (str clear "\n [ X ] [ 2 ] [ O ] \n [ 4 ] [ 5 ] [ X ] \n [ 7 ] [ 8 ] [ 9 ]\n")
                        (with-out-str (display [X nil O nil nil X nil nil nil]))))
 
          (it "displays player options"
-            (should= (str "Choose player option:\n " (player-options/display) "\n")
-                    (with-out-str ( prompt-for-player-option))))
+            (should= (str clear "Choose player option:\n " (player-options/display) "\n")
+                    (with-out-str (prompt-for-player-option))))
 
          (it "displays invalid message when input is not a valid player option"
             (should= "Not a valid player option!\n"

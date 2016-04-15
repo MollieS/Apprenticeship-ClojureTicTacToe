@@ -6,7 +6,7 @@
             [tic-tac-toe.player-options :as player-options]))
 
 (defn- setup-players [first-player second-player]
- { X first-player
+  { X first-player
    O second-player})
 
 (defn configure-players [game-option]
@@ -16,5 +16,7 @@
     (= game-option player-options/human-random-id) (setup-players human-player/choose-move random-player/choose-move)
     (= game-option player-options/unbeatable-human-id) (setup-players minimax-player/choose-move human-player/choose-move)
     (= game-option player-options/human-unbeatable-id) (setup-players human-player/choose-move minimax-player/choose-move)
-    )
-  )
+    (= game-option player-options/random-unbeatable-id) (setup-players random-player/delayed-random-move minimax-player/delayed-unbeatable-move)
+    (= game-option player-options/unbeatable-random-id) (setup-players minimax-player/delayed-unbeatable-move random-player/delayed-random-move)
+    (= game-option player-options/random-random-id) (setup-players random-player/delayed-random-move random-player/delayed-random-move )
+    (= game-option player-options/unbeatable-unbeatable-id) (setup-players minimax-player/delayed-unbeatable-move minimax-player/delayed-unbeatable-move)))

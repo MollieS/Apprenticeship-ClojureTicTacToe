@@ -1,7 +1,8 @@
 (ns tic-tac-toe.minimax-player
   (:require [tic-tac-toe.minimax-player :refer :all]
             [tic-tac-toe.board :as board]
-            [tic-tac-toe.marks :as marks]))
+            [tic-tac-toe.marks :as marks]
+            [tic-tac-toe.delayed-player :as delayed-player]))
 
 (def draw-score 0)
 (def max-score 10)
@@ -111,3 +112,6 @@
                                      initial-alpha
                                      initial-beta)]
     best-position))
+
+(def delayed-unbeatable-move
+  (partial delayed-player/delayed-move 1000 (partial choose-move)))

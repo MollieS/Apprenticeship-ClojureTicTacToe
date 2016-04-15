@@ -12,7 +12,6 @@
   (date-time/in-millis (date-time/interval starting-time finish-time)))
 
 (describe "Minimax Player"
-
           (it "takes winning move on top row"
               (should= 0
                        (choose-move [nil X X O O nil nil nil nil])))
